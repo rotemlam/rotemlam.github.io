@@ -194,8 +194,8 @@
   <hr class="separator">
 
   <div class="section">
-    <div class="section-subtitle">🌪️ מחלוקות</div>
-    <h2 class="section-title">הכי מפלג</h2>
+    <div class="section-subtitle">🌪️ פילוג והסתה</div>
+    <h2 class="section-title">הכי שנויים במחלוקת</h2>
     <div class="divider"></div>
     <p class="section-desc">אלו המקומות שעוררו את הדעות הכי שונות — שונות גבוהה בין השופטים</p>
     <div class="polar-grid" id="polarGrid"></div>
@@ -286,7 +286,7 @@
       <div class="winner-emoji">👑</div>
       <div class="winner-text">
         <h2>תמיר - מלך החומוס!</h2>
-        <p>שליט הטחינה · קיסר הגרגרים · אדון הפיתה</p>
+        <p>תודה שלקחת אותנו למסע בין גרגרים</p>
       </div>
     </div>
   </div>
@@ -301,7 +301,7 @@ const PLACES = {
   1: { name: 'חמודות', addr: 'יצחק שדה 28, תל אביב' },
   2: { name: 'אל קלחה', addr: 'דרך שלמה 3, יפו' },
   3: { name: 'אבו חסאן', addr: 'הדולפין 1, יפו' },
-  4: { name: 'ליאור יוגב', addr: 'אייסרליש 22, תל אביב' },
+  4: { name: 'ליאור', addr: 'אייסרליש 22, תל אביב' },
   5: { name: 'הכרם', addr: 'שוקן 30, תל אביב' },
   6: { name: 'אסלי', addr: 'דיזנגוף 338, תל אביב' },
   7: { name: 'כורזין', addr: 'כורזין 5, גבעתיים' },
@@ -312,7 +312,7 @@ const PLACE_COORDS = [
   { id:1, name:'חמודות', addr:'יצחק שדה 28, תל אביב', lat:32.0649, lng:34.7872 },
   { id:2, name:'אל קלחה', addr:'דרך שלמה 3, יפו', lat:32.0550, lng:34.7601 },
   { id:3, name:'אבו חסאן', addr:'הדולפין 1, יפו', lat:32.0503, lng:34.7509 },
-  { id:4, name:'ליאור יוגב', addr:'אייסרליש 22, תל אביב', lat:32.0710, lng:34.7922 },
+  { id:4, name:'ליאור', addr:'אייסרליש 22, תל אביב', lat:32.0710, lng:34.7922 },
   { id:5, name:'הכרם', addr:'שוקן 30, תל אביב', lat:32.0516, lng:34.7720 },
   { id:6, name:'אסלי', addr:'דיזנגוף 338, תל אביב', lat:32.0968, lng:34.7760 },
   { id:7, name:'כורזין', addr:'כורזין 5, גבעתיים', lat:32.0599, lng:34.8162 },
@@ -407,7 +407,7 @@ function getPitaScore(ranker, rawPita) {
 }
 
 // Correct guesses
-const CORRECT_NAMES = {1:'חמודות',2:'אל קלחה',3:'אבו חסאן',4:'ליאור יוגב',5:'הכרם',6:'אסלי',7:'כורזין',8:'אבו אדהם'};
+const CORRECT_NAMES = {1:'חמודות',2:'אל קלחה',3:'אבו חסאן',4:'ליאור',5:'הכרם',6:'אסלי',7:'כורזין',8:'אבו אדהם'};
 function isCorrect(placeId, guess) {
   if (!guess) return false;
   const correct = CORRECT_NAMES[placeId].toLowerCase();
@@ -418,7 +418,7 @@ function isCorrect(placeId, guess) {
   if (correct === 'אבו אדהם' && g.includes('אבו אדהם')) return true;
   if (correct === 'חמודות' && g.includes('חמוד')) return true;
   if (correct === 'אל קלחה' && (g.includes('קלחה')||g.includes('כלחה'))) return true;
-  if (correct === 'ליאור יוגב' && (g.includes('ליאור')||g.includes('יוגב'))) return true;
+  if (correct === 'ליאור' && (g.includes('ליאור') )) return true;
   if (correct === 'כורזין' && g.includes('כורזין')) return true;
   return g === correct;
 }
@@ -517,7 +517,7 @@ const maxStd = Math.max(...polarSorted.map(p=>p.rawStd));
 document.getElementById('polarGrid').innerHTML = polarSorted.map((p,i) => `
   <div class="polar-card fade-in">
     <div class="polar-place">${i===0?'🌪️ ':''}<strong>${p.name}</strong></div>
-    <div class="polar-stat"><span class="polar-label">שונות סטנדרטית</span><span class="polar-value">${p.rawStd.toFixed(2)}</span></div>
+    <div class="polar-stat"><span class="polar-label">סטיית תקן</span><span class="polar-value">${p.rawStd.toFixed(2)}</span></div>
     <div class="polar-stat"><span class="polar-label">מינימום</span><span class="polar-value">${Math.min(...p.rawScores).toFixed(1)}</span></div>
     <div class="polar-stat"><span class="polar-label">מקסימום</span><span class="polar-value">${Math.max(...p.rawScores).toFixed(1)}</span></div>
     <div class="polar-stat"><span class="polar-label">ממוצע</span><span class="polar-value">${p.rawAvg.toFixed(2)}</span></div>
@@ -632,7 +632,7 @@ if (guessersSorted.length && maxCorrect > 0) {
   const winnerNames = winners.map(r=>r.name).join(', ');
   const isLior = winners.length === 1 && winners[0].name === 'ליאור';
   document.getElementById('guessWinnerName').textContent = `${winnerNames} — ${isLior ? 'אלופת הניחושים!' : 'אלוף הניחושים!'} 🌶️`;
-  document.getElementById('guessWinnerDesc').textContent = `${isLior ? 'זיהתה' : 'זיהה/ה'} נכון ${maxCorrect} מתוך ${winners[0].total} מקומות`;
+  document.getElementById('guessWinnerDesc').textContent = `${isLior ? 'זיהתה' : 'זיהה/זיהתה'} נכון ${maxCorrect} מתוך ${winners[0].total} מקומות`;
 }
 
 const rankersGrid = document.getElementById('rankersGrid');
@@ -644,8 +644,8 @@ const rankersGrid = document.getElementById('rankersGrid');
   const isChampion = g.correct.length === maxCorrect && maxCorrect > 0;
   const isDiverse = div && div.std > maxRStd * 0.75;
   let badge = '';
-  if (isChampion && r === 'ליאור') badge = '<div class="ranker-badge champion">🌶️ אלופת ניחושים</div>';
-  else if (isChampion) badge = '<div class="ranker-badge champion">🌶️ אלוף ניחושים</div>';
+  if (isChampion && r === 'ליאור') badge = '<div class="ranker-badge champion">🌶️ אלופת הניחושים</div>';
+  else if (isChampion) badge = '<div class="ranker-badge champion">🌶️ אלוף הניחושים</div>';
   else if (isDiverse) badge = '<div class="ranker-badge sharp">⚡ מגוון</div>';
   const guessPills = rawData.filter(d=>d[0]===r && d[4]!==null && typeof d[4]==='string').map(d => {
     const ok = isCorrect(d[1],d[4]);
