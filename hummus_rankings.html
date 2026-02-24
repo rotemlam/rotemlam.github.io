@@ -162,9 +162,9 @@
 
 <div class="hero">
   <h1>Hummus Fest <span>2026</span></h1>
-  <p class="hero-sub">24 בפברואר 2026 · 8 מקומות · 22 שופטים</p>
+  <p class="hero-sub">24 בפברואר 2026 · 8 מקומות · 22 מדרגים</p>
   <div class="stats-bar">
-    <div class="stat-item"><div class="stat-num" id="hero-rankers">22</div><div class="stat-label">שופטים</div></div>
+    <div class="stat-item"><div class="stat-num" id="hero-rankers">22</div><div class="stat-label">מדרגים</div></div>
     <div class="stat-item"><div class="stat-num">8</div><div class="stat-label">מקומות</div></div>
     <div class="stat-item"><div class="stat-num" id="hero-ratings">—</div><div class="stat-label">ציונים</div></div>
     <div class="stat-item"><div class="stat-num" id="hero-guesses">—</div><div class="stat-label">ניחושים נכונים</div></div>
@@ -177,7 +177,7 @@
     <div class="section-subtitle">🥇 המנצחים</div>
     <h2 class="section-title">מלכי החומוס</h2>
     <div class="divider"></div>
-    <p class="section-desc">ממוצע ציוני החומוס מנורמל - כדי לנטרל את השפעת הטווח האישי של כל שופט</p>
+    <p class="section-desc">ממוצע ציוני החומוס מנורמל - כדי לנטרל את השפעת הטווח האישי של כל משתתפ.ת</p>
     <div class="podium" id="hummusPodium"></div>
     <div class="scores-table" id="scoresTable"></div>
   </div>
@@ -197,7 +197,7 @@
     <div class="section-subtitle">🌪️ פילוג והסתה</div>
     <h2 class="section-title">הכי שנויים במחלוקת</h2>
     <div class="divider"></div>
-    <p class="section-desc">אלו המקומות שעוררו את הדעות הכי שונות — שונות גבוהה בין השופטים</p>
+    <p class="section-desc">אלו המקומות שעוררו את הדעות הכי שונות — שונות גבוהה בין המדרגים</p>
     <div class="polar-grid" id="polarGrid"></div>
   </div>
 
@@ -222,7 +222,7 @@
     <h2 class="section-title">כל הציונים</h2>
     <div class="divider"></div>
     <div class="chart-card" style="overflow-x:auto;">
-      <div class="chart-title">ציוני חומוס — שופט × מקום</div>
+      <div class="chart-title">ציוני חומוס — משתתפ.ת × מקום</div>
       <table class="heat-table" id="heatTable"></table>
     </div>
   </div>
@@ -257,11 +257,11 @@
     <div class="divider"></div>
     <div class="two-col" style="margin-bottom:2.5rem;">
       <div>
-        <div class="chart-title" style="margin-bottom:1rem;">⚡ הכי מגוונים — שופטים שנתנו טווח ציונים רחב</div>
+        <div class="chart-title" style="margin-bottom:1rem;">⚡ הכי מגוונים — משתתפים שנתנו טווח ציונים רחב</div>
         <div class="diversity-list" id="diverseList"></div>
       </div>
       <div>
-        <div class="chart-title" style="margin-bottom:1rem;">😐 הכי אדישים — שופטים שנתנו ציונים אחידים</div>
+        <div class="chart-title" style="margin-bottom:1rem;">😐 הכי אדישים — משתתפים שנתנו ציונים אחידים</div>
         <div class="diversity-list" id="indifferentList"></div>
       </div>
     </div>
@@ -294,7 +294,7 @@
 </div>
 
 <footer>Hummus Fest 2026</footer>
-  
+
 <script>
 const PLACES = {
   1: { name: 'חמודות', addr: 'יצחק שדה 28, תל אביב' },
@@ -417,7 +417,7 @@ function isCorrect(placeId, guess) {
   if (correct === 'אבו אדהם' && g.includes('אבו אדהם')) return true;
   if (correct === 'חמודות' && g.includes('חמוד')) return true;
   if (correct === 'אל קלחה' && (g.includes('קלחה')||g.includes('כלחה'))) return true;
-  if (correct === 'ליאור' && (g.includes('ליאור') )) return true;
+  if (correct === 'ליאור' && (g.includes('ליאור')||g.includes('יוגב'))) return true;
   if (correct === 'כורזין' && g.includes('כורזין')) return true;
   return g === correct;
 }
@@ -631,7 +631,7 @@ if (guessersSorted.length && maxCorrect > 0) {
   const winnerNames = winners.map(r=>r.name).join(', ');
   const isLior = winners.length === 1 && winners[0].name === 'ליאור';
   document.getElementById('guessWinnerName').textContent = `${winnerNames} — ${isLior ? 'אלופת הניחושים!' : 'אלוף הניחושים!'} 🌶️`;
-  document.getElementById('guessWinnerDesc').textContent = `${isLior ? 'זיהתה' : 'זיהה/זיהתה'} נכון ${maxCorrect} מתוך ${winners[0].total} מקומות`;
+  document.getElementById('guessWinnerDesc').textContent = `${isLior ? 'זיהתה' : 'זיהה/ה'} נכון ${maxCorrect} מתוך ${winners[0].total} מקומות`;
 }
 
 const rankersGrid = document.getElementById('rankersGrid');
@@ -643,8 +643,8 @@ const rankersGrid = document.getElementById('rankersGrid');
   const isChampion = g.correct.length === maxCorrect && maxCorrect > 0;
   const isDiverse = div && div.std > maxRStd * 0.75;
   let badge = '';
-  if (isChampion && r === 'ליאור') badge = '<div class="ranker-badge champion">🌶️ אלופת הניחושים</div>';
-  else if (isChampion) badge = '<div class="ranker-badge champion">🌶️ אלוף הניחושים</div>';
+  if (isChampion && r === 'ליאור') badge = '<div class="ranker-badge champion">🌶️ אלופת ניחושים</div>';
+  else if (isChampion) badge = '<div class="ranker-badge champion">🌶️ אלוף ניחושים</div>';
   else if (isDiverse) badge = '<div class="ranker-badge sharp">⚡ מגוון</div>';
   const guessPills = rawData.filter(d=>d[0]===r && d[4]!==null && typeof d[4]==='string').map(d => {
     const ok = isCorrect(d[1],d[4]);
