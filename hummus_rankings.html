@@ -655,7 +655,7 @@ const rankersGrid = document.getElementById('rankersGrid');
     <div class="ranker-name">${r === 'תמיר' ? r + ' 👑' : r}</div>
     <div class="ranker-stat">ממוצע ציון: <span>${avgScore.toFixed(1)}</span></div>
     ${div ? `<div class="ranker-stat">שונות: <span>${div.std.toFixed(2)}</span></div>` : ''}
-    ${g.correct.length > 0 ? `<div class="ranker-stat">ניחושים נכונים: <span style="color:var(--olive)">${g.correct.length}/${g.total}</span></div>` : ''}
+    ${g.correct.length > 0 ? `<div class="ranker-stat">ניחושים נכונים: <span style="color:var(--olive)">${g.correct.length}</span></div>` : ''}
     ${guessPills ? `<div class="guess-pills">${guessPills}</div>` : '<div style="font-size:0.8rem;opacity:0.4;margin-top:0.5rem;">לא ניחש/ה מקומות</div>'}
   </div>`;
 });
