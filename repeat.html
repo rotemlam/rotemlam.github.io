@@ -904,26 +904,39 @@ async function generatePKCE() {
 }
 
 window.onload = async () => {
-  document.getElementById('redirect-hint').textContent =
-    window.location.href.split('?')[0].split('#')[0];
+  const redirectBase = window.location.href.split('?')[0].split('#')[0];
+  document.getElementById('redirect-hint').textContent = redirectBase;
   const HARDCODED_ID = '04a1c8d3de3c473c9ef1360c687ad8c9';
   localStorage.setItem('sp_client_id', HARDCODED_ID);
   document.getElementById('client-id-input').value = HARDCODED_ID;
 
-  // PKCE callback: ?code=...
+  // Check for OAuth error
   const params = new URLSearchParams(window.location.search);
-  const code = params.get('code');
+  const error  = params.get('error');
+  const code   = params.get('code');
+
+  if (error) {
+    window.history.replaceState(null, '', window.location.pathname);
+    setStatus('Spotify denied access: ' + error, 'error');
+    return;
+  }
+
   if (code) {
+    // Keep setup section visible so status messages show during token exchange
+    document.getElementById('section-setup').style.display = '';
+    document.getElementById('section-app').style.display = 'none';
+    setStatus('<span class="spinner"></span> Connecting to Spotify...', '');
     window.history.replaceState(null, '', window.location.pathname);
     await exchangeCode(code);
     return;
   }
 
-  // Restore existing token
+  // Restore existing valid token
   const stored = localStorage.getItem('sp_token');
-  const expiry = localStorage.getItem('sp_token_expiry');
+  const expiry  = localStorage.getItem('sp_token_expiry');
   if (stored && expiry && Date.now() < parseInt(expiry)) {
-    accessToken = stored; initApp();
+    accessToken = stored;
+    initApp();
   }
 };
 
@@ -944,31 +957,36 @@ async function startAuth() {
 
 async function exchangeCode(code) {
   const verifier = localStorage.getItem('sp_pkce_verifier');
-  const id = localStorage.getItem('sp_client_id');
-  const redir = window.location.href.split('?')[0].split('#')[0];
-  if (!verifier || !id) { setStatus('Auth error: missing verifier. Please try again.', 'error'); return; }
+  const id       = localStorage.getItem('sp_client_id');
+  const redir    = window.location.href.split('?')[0].split('#')[0];
+
+  if (!verifier || !id) {
+    setStatus('Auth error: missing verifier. Please sign in again.', 'error');
+    return;
+  }
+
   try {
     const res = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
-        grant_type: 'authorization_code',
+        grant_type:    'authorization_code',
         code,
-        redirect_uri: redir,
-        client_id: id,
+        redirect_uri:  redir,
+        client_id:     id,
         code_verifier: verifier
       })
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error_description || data.error);
+    if (!res.ok) throw new Error(data.error_description || data.error || JSON.stringify(data));
     accessToken = data.access_token;
-    localStorage.setItem('sp_token', accessToken);
+    localStorage.setItem('sp_token',        accessToken);
     localStorage.setItem('sp_token_expiry', Date.now() + data.expires_in * 1000);
     if (data.refresh_token) localStorage.setItem('sp_refresh_token', data.refresh_token);
     localStorage.removeItem('sp_pkce_verifier');
     initApp();
   } catch(e) {
-    setStatus('Token exchange failed: ' + e.message, 'error');
+    setStatus('Connection failed: ' + e.message + '. Please try signing in again.', 'error');
   }
 }
 
