@@ -667,6 +667,7 @@
 
   .toggle-track.on .toggle-knob { left: 18px; }
 
+  .loop-toggle { direction: rtl; }
   .loop-toggle span { font-size: 0.82rem; color: var(--text); font-weight: 400; }
 
   .divider-v {
@@ -938,6 +939,228 @@
   .volume-row {
     direction: ltr;
   }
+
+  /* LINK INPUT */
+  .link-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .link-input {
+    flex: 1;
+    background: linear-gradient(145deg, rgba(18,34,54,0.97), rgba(13,27,42,0.99));
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.82rem;
+    padding: 11px 16px;
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    direction: ltr;
+    text-align: left;
+  }
+  .link-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,169,110,0.1); }
+  .link-input::placeholder { color: rgba(168,152,144,0.4); direction: ltr; text-align: left; }
+  .btn-link {
+    background: linear-gradient(135deg, rgba(201,169,110,0.3) 0%, rgba(201,169,110,0.15) 100%);
+    color: var(--gold-soft);
+    padding: 11px 16px;
+    border-radius: 14px;
+    flex-shrink: 0;
+    border: 1px solid rgba(201,169,110,0.25);
+    cursor: pointer;
+    transition: transform 0.15s, background 0.2s;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: inherit;
+  }
+  .btn-link:hover { background: linear-gradient(135deg, rgba(201,169,110,0.4), rgba(201,169,110,0.25)); transform: translateY(-1px); }
+  .btn-link:active { transform: scale(0.96); }
+
+  /* BROWSE PANEL */
+  #browse-panel {
+    background: linear-gradient(145deg, rgba(18,34,54,0.97), rgba(13,27,42,0.99));
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 14px;
+    display: none;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  }
+  #browse-panel.visible { display: block; }
+  .browse-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border2);
+    padding: 0 6px;
+  }
+  .browse-tab {
+    flex: 1;
+    padding: 12px 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .browse-tab.active { color: var(--pink-soft); border-bottom-color: var(--pink); }
+  .browse-tab:hover:not(.active) { color: var(--text); }
+  .browse-list { max-height: 260px; overflow-y: auto; }
+  .browse-list::-webkit-scrollbar { width: 4px; }
+  .browse-list::-webkit-scrollbar-track { background: transparent; }
+  .browse-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .browse-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-bottom: 1px solid var(--border2);
+  }
+  .browse-item:last-child { border-bottom: none; }
+  .browse-item:hover { background: rgba(212,132,154,0.06); }
+  .browse-item img {
+    width: 42px; height: 42px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--navy2);
+  }
+  .browse-item-meta { flex: 1; min-width: 0; }
+  .browse-item-meta strong {
+    display: block;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--cream);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .browse-item-meta span { font-size: 0.7rem; color: var(--text-dim); }
+  .browse-header {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    padding: 12px 18px 8px;
+    border-bottom: 1px solid var(--border2);
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .browse-header:hover { color: var(--gold-soft); }
+  .browse-back {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    transition: opacity 0.15s;
+  }
+
+  /* HEART SAVE BUTTONS — filled when slot occupied */
+  .fav-btn.save-btn svg.heart-empty { display: block; }
+  .fav-btn.save-btn svg.heart-filled { display: none; }
+  .fav-btn.save-btn.occupied svg.heart-empty { display: none; }
+  .fav-btn.save-btn.occupied svg.heart-filled { display: block; }
+  .fav-btn.save-btn.occupied { color: var(--pink); }
+  .fav-btn.save-btn.occupied:hover { color: var(--gold); }
+
+  /* ADD SLOT BUTTON */
+  .fav-slot.add-slot {
+    border-style: dashed;
+    border-color: rgba(201,169,110,0.2);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  .fav-slot.add-slot:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .fav-add-icon { font-size: 1.2rem; opacity: 0.35; color: var(--gold); }
+  .fav-add-text { font-size: 0.62rem; color: var(--text-dim); opacity: 0.5; }
+
+  /* PLAYLIST SAVE BUTTON */
+  .playlist-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border2);
+    position: relative;
+    z-index: 1;
+  }
+  .btn-playlist {
+    flex: 1;
+    background: linear-gradient(135deg, rgba(29,185,84,0.15) 0%, rgba(29,185,84,0.08) 100%);
+    border: 1px solid rgba(29,185,84,0.25);
+    border-radius: 10px;
+    color: #1db954;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 9px 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-playlist:hover { background: linear-gradient(135deg, rgba(29,185,84,0.25), rgba(29,185,84,0.15)); transform: translateY(-1px); }
+  .btn-playlist:active { transform: scale(0.97); }
+  .btn-playlist.done { color: var(--gold-soft); border-color: rgba(201,169,110,0.3); background: linear-gradient(135deg, rgba(201,169,110,0.12), rgba(201,169,110,0.06)); }
+
+  /* PREVIEW */
+  .preview-wrap {
+    position: relative;
+    margin-bottom: 16px;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .preview-ui {
+    filter: blur(3px);
+    opacity: 0.45;
+    pointer-events: none;
+    user-select: none;
+    transform: scale(0.98);
+    transform-origin: top center;
+  }
+
+  .preview-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: radial-gradient(ellipse at center, rgba(13,27,42,0.55) 0%, rgba(13,27,42,0.2) 100%);
+    border-radius: 20px;
+    pointer-events: none;
+  }
+
+  .preview-lock {
+    font-size: 1.6rem;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+    animation: moonFloat 4s ease-in-out infinite;
+  }
+
+  .preview-hint {
+    font-size: 0.72rem;
+    color: var(--pink-pale);
+    letter-spacing: 0.1em;
+    font-weight: 300;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+  }
 </style>
 </head>
 <body>
@@ -952,23 +1175,90 @@
 
   <!-- SETUP -->
   <div id="section-setup">
-    <div class="info-box">
-      <strong-label>&#x2728; One-time Setup</strong-label>
-      <ol>
-        <li>Visit <a href="https://developer.spotify.com/dashboard" target="_blank">developer.spotify.com/dashboard</a></li>
-        <li>Create an app &amp; add this page URL as the Redirect URI:<br>
-          <span id="redirect-hint" style="color:var(--pink-soft);font-size:0.76rem;word-break:break-all"></span></li>
-        <li>Paste your <strong>Client ID</strong> below and sign in</li>
-        <li>Spotify <strong>Premium</strong> required for playback control</li>
-      </ol>
-    </div>
+
+    <!-- PREVIEW -->
+    <div class="preview-wrap">
+      <div class="preview-ui">
+
+        <!-- fake favorites -->
+        <div style="margin-bottom:14px">
+          <div style="font-size:0.62rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px">
+            &#x2665; מועדפים
+            <span style="flex:1;height:1px;background:linear-gradient(to left,rgba(201,169,110,0.25),transparent)"></span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+            <div style="background:linear-gradient(145deg,rgba(18,34,54,0.97),rgba(13,27,42,0.99));border:1px solid var(--border);border-radius:14px;padding:12px;min-height:88px;display:flex;flex-direction:column;gap:6px">
+              <div style="width:100%;aspect-ratio:1;border-radius:8px;background:linear-gradient(135deg,rgba(212,132,154,0.2),rgba(92,61,46,0.3))"></div>
+              <div style="height:8px;border-radius:4px;background:rgba(245,237,232,0.12);width:90%"></div>
+              <div style="height:6px;border-radius:3px;background:rgba(245,237,232,0.07);width:65%"></div>
+            </div>
+            <div style="background:linear-gradient(145deg,rgba(18,34,54,0.97),rgba(13,27,42,0.99));border:1px dashed rgba(212,132,154,0.2);border-radius:14px;padding:12px;min-height:88px;display:flex;align-items:center;justify-content:center">
+              <span style="font-size:1.1rem;opacity:0.2;color:var(--pink)">&#x2665;</span>
+            </div>
+            <div style="background:linear-gradient(145deg,rgba(18,34,54,0.97),rgba(13,27,42,0.99));border:1px dashed rgba(212,132,154,0.2);border-radius:14px;padding:12px;min-height:88px;display:flex;align-items:center;justify-content:center">
+              <span style="font-size:1.1rem;opacity:0.2;color:var(--pink)">&#x2665;</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- fake player card -->
+        <div style="background:linear-gradient(160deg,rgba(22,38,60,0.98),rgba(13,27,42,1));border:1px solid var(--border);border-radius:24px;padding:24px 22px 20px">
+
+          <div style="font-size:0.6rem;letter-spacing:0.22em;color:var(--pink-soft);text-transform:uppercase;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px">
+            <div style="width:6px;height:6px;background:var(--pink);border-radius:50%;box-shadow:0 0 6px var(--pink)"></div>
+            מתנגן עכשיו
+          </div>
+
+          <div style="display:flex;gap:14px;margin-bottom:18px;align-items:center">
+            <div style="width:72px;height:72px;border-radius:12px;background:linear-gradient(135deg,rgba(92,61,46,0.5),rgba(212,132,154,0.2));flex-shrink:0"></div>
+            <div style="flex:1">
+              <div style="height:10px;border-radius:5px;background:rgba(245,237,232,0.15);width:88%;margin-bottom:8px"></div>
+              <div style="height:10px;border-radius:5px;background:rgba(245,237,232,0.15);width:65%;margin-bottom:8px"></div>
+              <div style="height:7px;border-radius:4px;background:rgba(245,237,232,0.07);width:50%"></div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:18px">
+            <div style="height:3px;background:rgba(245,237,232,0.08);border-radius:2px;margin-bottom:8px;overflow:hidden">
+              <div style="height:100%;width:38%;background:linear-gradient(to right,var(--pink),var(--gold));border-radius:2px"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:0.68rem;color:var(--text-dim)">
+              <span>14:22</span><span>38:47</span>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:18px">
+            <div style="width:20px;height:20px;border-radius:50%;background:rgba(245,237,232,0.06)"></div>
+            <div style="width:22px;height:22px;border-radius:50%;background:rgba(245,237,232,0.06)"></div>
+            <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--pink),#a85068)"></div>
+            <div style="width:22px;height:22px;border-radius:50%;background:rgba(245,237,232,0.06)"></div>
+            <div style="width:20px;height:20px;border-radius:50%;background:rgba(245,237,232,0.06)"></div>
+          </div>
+
+          <div style="background:rgba(13,27,42,0.5);border:1px solid var(--border2);border-radius:14px;padding:14px 16px">
+            <div style="height:7px;border-radius:4px;background:rgba(201,169,110,0.2);width:40%;margin-bottom:12px"></div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:34px;height:18px;border-radius:9px;background:linear-gradient(135deg,var(--pink),#a85068)"></div>
+              <div style="height:7px;border-radius:4px;background:rgba(245,237,232,0.08);width:50px"></div>
+              <div style="height:7px;border-radius:4px;background:rgba(245,237,232,0.06);width:30px"></div>
+              <div style="width:40px;height:26px;border-radius:7px;background:rgba(245,237,232,0.06)"></div>
+              <div style="height:7px;border-radius:4px;background:rgba(245,237,232,0.06);width:30px"></div>
+            </div>
+          </div>
+
+        </div>
+
+      </div><!-- /preview-ui -->
+
+      <div class="preview-overlay">
+        <span class="preview-lock">&#x1F512;</span>
+        <span class="preview-hint">התחברו כדי להתחיל</span>
+      </div>
+    </div><!-- /preview-wrap -->
 
     <div class="card">
       <div class="card-label">התחברו ל־Spotify</div>
-      <div class="field">
-        <label>Client ID</label>
-        <input type="text" id="client-id-input" placeholder="Your Spotify Client ID..." />
-      </div>
+      <input type="hidden" id="client-id-input" value="" />
       <button class="btn btn-primary" onclick="startAuth()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
         התחברו עם Spotify
@@ -998,6 +1288,27 @@
       <button class="btn-search" onclick="searchEpisodes()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
+      <button class="btn-search" style="background:linear-gradient(135deg,rgba(26,48,80,0.9),rgba(13,27,42,0.99));border:1px solid var(--border)" title="עיון ברשימות" onclick="toggleBrowse()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1" fill="currentColor" stroke="none"/><circle cx="3" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="3" cy="18" r="1" fill="currentColor" stroke="none"/></svg>
+      </button>
+    </div>
+
+    <div class="link-row">
+      <input class="link-input" type="text" id="link-input"
+        placeholder="https://open.spotify.com/episode/..."
+        onkeydown="if(event.key==='Enter')openSpotifyLink()" />
+      <button class="btn-link" onclick="openSpotifyLink()">פתחו</button>
+    </div>
+
+    <div id="browse-panel">
+      <div class="browse-header" id="browse-header">
+        <span id="browse-title">הספרייה שלי</span>
+      </div>
+      <div class="browse-tabs" id="browse-tabs">
+        <button class="browse-tab active" onclick="switchBrowseTab('playlists')">רשימות השמעה</button>
+        <button class="browse-tab" onclick="switchBrowseTab('liked')">אהבתי</button>
+      </div>
+      <div class="browse-list" id="browse-list"></div>
     </div>
 
     <div class="favorites-section" id="favorites-section">
@@ -1017,20 +1328,7 @@
       <div class="now-playing-label">
         <div class="breathe-dot"></div>
         מתנגן עכשיו
-        <div style="margin-left:auto;display:flex;gap:6px">
-          <button class="fav-btn save-btn" title="לשמור במועדף 1" onclick="saveFavorite(0)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-            1
-          </button>
-          <button class="fav-btn save-btn" title="לשמור במועדף 2" onclick="saveFavorite(1)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-            2
-          </button>
-          <button class="fav-btn save-btn" title="לשמור במועדף 3" onclick="saveFavorite(2)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-            3
-          </button>
-        </div>
+        <div id="fav-save-btns" style="margin-left:auto;display:flex;gap:6px"></div>
       </div>
 
       <div class="episode-row">
@@ -1095,6 +1393,13 @@
         <div class="loop-status" id="loop-status"></div>
       </div>
 
+      <div class="playlist-row">
+        <button class="btn-playlist" id="btn-add-playlist" onclick="addToCollabPlaylist()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+          הוסיפו לפלייליסט
+        </button>
+      </div>
+
     </div>
 
     <div id="app-status"></div>
@@ -1117,7 +1422,7 @@ const DEFAULT_FAVORITES = [
     name: null, // will be fetched from API after login
     show: null,
     image: null,
-    startMs: 154000
+    startMs: 15000
   },
   null,
   null
@@ -1147,6 +1452,7 @@ function saveFavorite(slot) {
   };
   saveFavoritesToStorage(favs);
   renderFavorites();
+  updateSaveHearts();
   setAppStatus('נשמר במועדף ' + (slot + 1), 'success');
 }
 
@@ -1173,6 +1479,7 @@ async function playFavorite(slot) {
   document.getElementById('results').classList.remove('visible');
   await playEpisode(fav.startMs || 0);
   renderFavorites();
+  updateSaveHearts();
 }
 
 async function fetchAndCacheFavoriteMeta(slot, uri) {
@@ -1219,7 +1526,11 @@ function renderFavorites() {
           </button>
         </div>
       </div>`;
-  }).join('');
+  }).join('') + (favs.length < 5 ? `
+      <div class="fav-slot add-slot" onclick="addFavoriteSlot()">
+        <span class="fav-add-icon">+</span>
+        <span class="fav-add-text">הוסיפו מועדף</span>
+      </div>` : '');
 }
 
 async function initFavorites() {
@@ -1233,8 +1544,225 @@ async function initFavorites() {
   renderFavorites();
 }
 
+
+// ── COLLAB PLAYLIST ──
+const COLLAB_PLAYLIST_ID = '36ro7OMrRHRW8gVQhScQ6R';
+
+async function addToCollabPlaylist() {
+  if (!currentEpisodeUri) return;
+  const btn = document.getElementById('btn-add-playlist');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> מוסיפים...';
+  try {
+    const res = await spotifyFetch(`https://api.spotify.com/v1/playlists/${COLLAB_PLAYLIST_ID}/tracks`, {
+      method: 'POST',
+      body: JSON.stringify({ uris: [currentEpisodeUri] })
+    });
+    if (!res.ok) {
+      const e = await res.json().catch(()=>({}));
+      throw new Error(e.error?.message || res.status);
+    }
+    btn.classList.add('done');
+    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> נוסף לפלייליסט`;
+    btn.disabled = false;
+    setTimeout(() => {
+      btn.classList.remove('done');
+      btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg> הוסיפו לפלייליסט`;
+    }, 3000);
+  } catch(e) {
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg> הוסיפו לפלייליסט`;
+    setAppStatus('שגיאה בהוספה: ' + e.message, 'error');
+  }
+}
+
+// ── OPEN SPOTIFY LINK ──
+function openSpotifyLink() {
+  const raw = document.getElementById('link-input').value.trim();
+  if (!raw) return;
+  // Support formats: open.spotify.com/episode/ID or spotify:episode:ID
+  let episodeId = null;
+  const urlMatch = raw.match(/spotify\.com\/episode\/([A-Za-z0-9]+)/);
+  const uriMatch = raw.match(/spotify:episode:([A-Za-z0-9]+)/);
+  if (urlMatch) episodeId = urlMatch[1];
+  else if (uriMatch) episodeId = uriMatch[1];
+  if (!episodeId) { setAppStatus('קישור לא תקין. נסו קישור לפרק מ-Spotify.', 'error'); return; }
+
+  // Parse t= timestamp if present
+  let startMs = 0;
+  const tMatch = raw.match(/[?&]t=(\d+)/);
+  if (tMatch) startMs = parseInt(tMatch[1]) * 1000;
+
+  setAppStatus('<span class="spinner"></span> טוען פרק...', '');
+  spotifyFetch(`https://api.spotify.com/v1/episodes/${episodeId}?market=from_token`)
+    .then(r => r.json())
+    .then(data => {
+      if (data.error) throw new Error(data.error.message);
+      document.getElementById('link-input').value = '';
+      selectEpisodeObj({
+        uri: data.uri,
+        name: data.name,
+        show: data.show?.name || '',
+        image: data.images?.[0]?.url || '',
+        durationMs: data.duration_ms,
+        startMs
+      });
+    })
+    .catch(e => setAppStatus('שגיאה בטעינת הפרק: ' + e.message, 'error'));
+}
+
+// ── BROWSE (playlists / liked episodes) ──
+let browseTab = 'playlists';
+let browseVisible = false;
+let currentPlaylistId = null;
+
+function toggleBrowse() {
+  browseVisible = !browseVisible;
+  const panel = document.getElementById('browse-panel');
+  if (browseVisible) {
+    panel.classList.add('visible');
+    loadBrowseTab(browseTab);
+  } else {
+    panel.classList.remove('visible');
+    currentPlaylistId = null;
+  }
+}
+
+function switchBrowseTab(tab) {
+  browseTab = tab;
+  currentPlaylistId = null;
+  document.querySelectorAll('.browse-tab').forEach((el, i) => {
+    el.classList.toggle('active', (i === 0 && tab === 'playlists') || (i === 1 && tab === 'liked'));
+  });
+  document.getElementById('browse-title').textContent = tab === 'playlists' ? 'הספרייה שלי' : 'אהבתי';
+  loadBrowseTab(tab);
+}
+
+async function loadBrowseTab(tab) {
+  const list = document.getElementById('browse-list');
+  list.innerHTML = '<div style="padding:16px;text-align:center"><span class="spinner"></span></div>';
+  try {
+    if (tab === 'playlists') {
+      const res = await spotifyFetch('https://api.spotify.com/v1/me/playlists?limit=20');
+      const data = await res.json();
+      renderBrowseItems(data.items || [], 'playlist');
+    } else {
+      const res = await spotifyFetch('https://api.spotify.com/v1/me/episodes?limit=20&market=from_token');
+      const data = await res.json();
+      renderBrowseItems((data.items || []).map(i => i.episode), 'episode');
+    }
+  } catch(e) { list.innerHTML = `<div style="padding:16px;font-size:0.8rem;color:var(--text-dim);text-align:center">${e.message}</div>`; }
+}
+
+async function loadPlaylistEpisodes(playlistId, playlistName) {
+  currentPlaylistId = playlistId;
+  document.getElementById('browse-title').textContent = playlistName;
+  const list = document.getElementById('browse-list');
+  list.innerHTML = '<div style="padding:16px;text-align:center"><span class="spinner"></span></div>';
+  try {
+    const res = await spotifyFetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=30&market=from_token`);
+    const data = await res.json();
+    const episodes = (data.items || [])
+      .filter(i => i.track?.type === 'episode')
+      .map(i => i.track);
+    if (!episodes.length) {
+      list.innerHTML = '<div style="padding:16px;font-size:0.8rem;color:var(--text-dim);text-align:center">לא נמצאו פרקים ברשימה זו.</div>';
+      return;
+    }
+    renderBrowseItems(episodes, 'episode');
+  } catch(e) { list.innerHTML = `<div style="padding:16px;font-size:0.8rem;color:var(--text-dim);text-align:center">${e.message}</div>`; }
+}
+
+function renderBrowseItems(items, type) {
+  const list = document.getElementById('browse-list');
+  if (!items.length) { list.innerHTML = '<div style="padding:16px;font-size:0.8rem;color:var(--text-dim);text-align:center">ריק.</div>'; return; }
+  list.innerHTML = items.map(item => {
+    if (!item) return '';
+    const img = item.images?.[0]?.url || '';
+    const name = esc(item.name || '');
+    const sub = type === 'playlist'
+      ? `${item.tracks?.total || ''} פריטים`
+      : esc(item.show?.name || '');
+    const onclick = type === 'playlist'
+      ? `loadPlaylistEpisodes('${item.id}', '${esc(item.name || '')}')`
+      : `selectEpisodeFromBrowse(${JSON.stringify({
+          uri: item.uri,
+          name: item.name,
+          show: item.show?.name || '',
+          image: img,
+          durationMs: item.duration_ms
+        }).replace(/"/g,'&quot;')})`;
+    return `
+      <div class="browse-item" onclick="${onclick}">
+        ${img ? `<img src="${img}" alt=""/>` : `<div style="width:42px;height:42px;border-radius:8px;background:var(--navy2);flex-shrink:0"></div>`}
+        <div class="browse-item-meta">
+          <strong>${name}</strong>
+          <span>${sub}</span>
+        </div>
+        ${type === 'playlist' ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-dim);flex-shrink:0"><polyline points="15 18 9 12 15 6"/></svg>' : ''}
+      </div>`;
+  }).join('');
+}
+
+function selectEpisodeFromBrowse(ep) {
+  document.getElementById('browse-panel').classList.remove('visible');
+  browseVisible = false;
+  currentPlaylistId = null;
+  selectEpisodeObj(ep);
+}
+
+// ── UPDATE HEART BUTTONS STATE ──
+function updateSaveHearts() {
+  const favs = loadFavorites();
+  const container = document.getElementById('fav-save-btns');
+  if (!container) return;
+  container.innerHTML = favs.map((fav, i) => {
+    const occupied = fav !== null;
+    return `<button class="fav-btn save-btn${occupied ? ' occupied' : ''}" title="${occupied ? 'לשמור במועדף ' + (i+1) + ' (יחליף)' : 'לשמור במועדף ' + (i+1)}" onclick="saveFavoriteConfirm(${i})">
+      <svg class="heart-empty" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      <svg class="heart-filled" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      ${i+1}
+    </button>`;
+  }).join('');
+  // Add an extra "+" slot if fewer than 5 favorites
+  if (favs.length < 5) {
+    container.innerHTML += `<button class="fav-btn save-btn" style="opacity:0.45" title="הוסיפו מועדף חדש" onclick="addFavoriteSlot()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>`;
+  }
+}
+
+function saveFavoriteConfirm(slot) {
+  if (!currentEpisodeUri) return;
+  const favs = loadFavorites();
+  if (favs[slot] !== null) {
+    // Slot occupied — confirm before overriding
+    if (!confirm('המועדף ' + (slot+1) + ' כבר תפוס. להחליף?')) return;
+  }
+  saveFavorite(slot);
+}
+
+function addFavoriteSlot() {
+  if (!currentEpisodeUri) { setAppStatus('בחרו פרק לפני שמוסיפים מועדף.', 'error'); return; }
+  const favs = loadFavorites();
+  if (favs.length >= 5) return;
+  favs.push({
+    uri:     currentEpisodeUri,
+    name:    document.getElementById('ep-name').textContent,
+    show:    document.getElementById('ep-show').textContent,
+    image:   document.getElementById('ep-cover').src,
+    startMs: 0
+  });
+  saveFavoritesToStorage(favs);
+  renderFavorites();
+  updateSaveHearts();
+  setAppStatus('נוסף מועדף חדש!', 'success');
+}
+
 const SCOPES = ['streaming','user-read-email','user-read-private',
-  'user-read-playback-state','user-modify-playback-state','user-read-currently-playing'].join(' ');
+  'user-read-playback-state','user-modify-playback-state','user-read-currently-playing',
+  'playlist-read-private','playlist-read-collaborative','playlist-modify-public','playlist-modify-private',
+  'user-library-read'].join(' ');
 
 // ── PKCE HELPERS ──
 function base64urlEncode(buffer) {
@@ -1251,7 +1779,6 @@ async function generatePKCE() {
 
 window.onload = async () => {
   const redirectBase = window.location.href.split('?')[0].split('#')[0];
-  document.getElementById('redirect-hint').textContent = redirectBase;
   const HARDCODED_ID = '04a1c8d3de3c473c9ef1360c687ad8c9';
   localStorage.setItem('sp_client_id', HARDCODED_ID);
   document.getElementById('client-id-input').value = HARDCODED_ID;
@@ -1427,16 +1954,25 @@ function renderResults(episodes) {
   box.classList.add('visible');
 }
 
-async function selectEpisode(ep) {
+async function selectEpisodeObj(ep) {
   if (!deviceId) { setAppStatus('הנגן עדיין לא מוכן, המתינו רגע...', 'error'); return; }
-  currentEpisodeUri = ep.uri; currentEpisodeDurationMs = ep.durationMs; repeatCount = 0; updateLoopStatus();
+  currentEpisodeUri = ep.uri; currentEpisodeDurationMs = ep.durationMs || 0; repeatCount = 0; updateLoopStatus();
   document.getElementById('ep-name').textContent = ep.name;
   document.getElementById('ep-show').textContent = ep.show;
-  document.getElementById('ep-cover').src = ep.image;
+  document.getElementById('ep-cover').src = ep.image || '';
   document.getElementById('player-card').classList.add('visible');
   document.getElementById('results').classList.remove('visible');
+  // Reset playlist button
+  const pb = document.getElementById('btn-add-playlist');
+  if (pb) { pb.classList.remove('done'); pb.disabled = false; pb.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg> הוסיפו לפלייליסט`; }
   renderFavorites();
-  await playEpisode();
+  updateSaveHearts();
+  setAppStatus('', '');
+  await playEpisode(ep.startMs || 0);
+}
+
+async function selectEpisode(ep) {
+  await selectEpisodeObj(ep);
 }
 
 async function playEpisode(startMs = 0) {
