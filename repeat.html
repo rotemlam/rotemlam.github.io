@@ -1277,12 +1277,22 @@ window.onload = async () => {
     return;
   }
 
-  // Restore existing valid token
+  // Restore existing token - accept even if expiry missing (legacy saves)
   const stored = localStorage.getItem('sp_token');
   const expiry  = localStorage.getItem('sp_token_expiry');
-  if (stored && expiry && Date.now() < parseInt(expiry)) {
+  const expired = expiry ? Date.now() > parseInt(expiry) : false;
+
+  if (stored && !expired) {
     accessToken = stored;
     initApp();
+  } else {
+    // Always ensure setup is visible as fallback
+    document.getElementById('section-setup').style.display = '';
+    document.getElementById('section-app').style.display = 'none';
+    if (stored && expired) {
+      ['sp_token','sp_token_expiry'].forEach(k => localStorage.removeItem(k));
+      setStatus('פג תוקף החיבור. התחברו שוב.', 'error');
+    }
   }
 };
 
@@ -1347,7 +1357,7 @@ function logout() {
 
 async function initApp() {
   document.getElementById('section-setup').style.display = 'none';
-  document.getElementById('section-app').style.display = '';
+  document.getElementById('section-app').style.display = 'block';
   await fetchUser();
   initPlayer();
   initFavorites();
