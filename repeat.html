@@ -1171,6 +1171,139 @@
   #player-card.no-episode .progress-fill::after { display: none; }
   #player-card.no-episode .ctrl-btn.main { opacity: 0.35; pointer-events: none; }
   #player-card.no-episode .progress-track { pointer-events: none; }
+
+  /* ══════════════════════════════════════════
+     MOBILE OPTIMIZATIONS
+     ══════════════════════════════════════════ */
+
+  /* Remove hover effects on touch devices — they stick and look broken */
+  @media (hover: none) {
+    .fav-slot:hover        { transform: none; border-color: var(--border); }
+    .fav-slot.active:hover { border-color: var(--pink); }
+    .fav-slot.empty:hover  { border-color: rgba(212,132,154,0.2); }
+    .ctrl-btn:hover        { transform: none; color: var(--text-dim); }
+    .ctrl-btn.main:hover   { transform: none; box-shadow: 0 6px 20px rgba(212,132,154,0.4); }
+    .btn-primary:hover     { transform: none; }
+    .btn-search:hover      { transform: none; }
+    .btn-link:hover        { transform: none; }
+    .btn-playlist:hover    { transform: none; }
+    .browse-item:hover     { background: transparent; }
+    .result-item:hover     { background: transparent; }
+  }
+
+  /* Larger touch targets for all interactive elements */
+  @media (pointer: coarse) {
+    .ctrl-btn         { min-width: 44px; min-height: 44px; }
+    .fav-btn          { min-width: 36px; min-height: 36px; padding: 8px; }
+    .btn-search       { padding: 14px 16px; }
+    .btn-link         { padding: 14px 16px; }
+    .browse-tab       { padding: 14px 8px; }
+    .result-item      { padding: 14px 16px; }
+    .browse-item      { padding: 13px 16px; }
+    input[type=range] { height: 20px; }
+    input[type=range]::-webkit-slider-thumb { width: 22px; height: 22px; }
+  }
+
+  @media (max-width: 480px) {
+
+    /* Tighter body padding */
+    body { padding: 24px 14px 100px; }
+
+    /* Smaller header */
+    .moon-icon  { font-size: 2rem; margin-bottom: 8px; }
+    header h1   { font-size: 1.6rem; }
+    header      { margin-bottom: 28px; }
+
+    /* Cards */
+    .card { padding: 20px 16px; }
+    #player-card { padding: 20px 16px 18px; border-radius: 20px; }
+
+    /* Search row — browse button stacks neatly */
+    .search-row { gap: 6px; }
+    .search-input { font-size: 1rem; padding: 13px 14px; border-radius: 12px; }
+    .btn-search { padding: 13px 14px; border-radius: 12px; }
+
+    /* Link row */
+    .link-input { font-size: 0.9rem; padding: 13px 14px; border-radius: 12px; }
+    .btn-link   { padding: 13px 14px; font-size: 0.85rem; border-radius: 12px; }
+
+    /* Favorites grid — slightly larger cards */
+    .favorites-grid { gap: 8px; }
+    .fav-slot { padding: 10px; border-radius: 12px; }
+    .fav-title { font-size: 0.68rem; }
+
+    /* Episode row — smaller cover on small screens */
+    .episode-row { gap: 12px; margin-bottom: 16px; }
+    #ep-cover { width: 62px; height: 62px; border-radius: 12px; }
+    #ep-name  { font-size: 0.92rem; }
+    #ep-show  { font-size: 0.7rem; }
+
+    /* Progress */
+    .progress-area { margin-bottom: 16px; }
+    .progress-track { height: 4px; }
+    .progress-fill::after { width: 12px; height: 12px; top: -4px; right: -6px; }
+
+    /* Controls — more spacing, bigger main button */
+    .controls { gap: 12px; margin-bottom: 16px; }
+    .ctrl-btn.main { width: 62px; height: 62px; }
+    .ctrl-btn.main svg { width: 26px; height: 26px; }
+    .ctrl-btn svg { width: 24px; height: 24px; }
+
+    /* Now-playing label — wrap gracefully */
+    .now-playing-label { flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+
+    /* Loop config */
+    .loop-config { padding: 14px 14px; border-radius: 12px; }
+    .loop-row { gap: 10px; }
+    .count-input { width: 52px; font-size: 1rem; }
+
+    /* Volume */
+    .volume-row { padding: 12px 0 0; margin-bottom: 12px; }
+
+    /* Playlist button */
+    .btn-playlist { font-size: 0.82rem; padding: 11px 12px; border-radius: 10px; }
+    .playlist-row { margin-top: 10px; padding-top: 10px; }
+
+    /* Browse panel */
+    .browse-tab { font-size: 0.8rem; padding: 13px 6px; }
+    .browse-list { max-height: 220px; }
+    .browse-item img { width: 38px; height: 38px; }
+    .browse-item-meta strong { font-size: 0.82rem; }
+
+    /* Results */
+    .result-item img { width: 42px; height: 42px; }
+    .result-meta strong { font-size: 0.82rem; }
+
+    /* User bar */
+    #user-bar { padding: 9px 12px; border-radius: 12px; }
+    #user-name { font-size: 0.82rem; }
+
+    /* Status */
+    #app-status { font-size: 0.8rem; }
+
+    /* Preview mock */
+    .preview-hint { font-size: 0.78rem; }
+  }
+
+  /* Very small screens (320px) */
+  @media (max-width: 360px) {
+    body { padding: 20px 10px 100px; }
+    header h1 { font-size: 1.4rem; }
+    .ctrl-btn.main { width: 56px; height: 56px; }
+    .controls { gap: 8px; }
+    #ep-cover { width: 54px; height: 54px; }
+    .count-input { width: 46px; }
+    .fav-slot { padding: 8px; }
+  }
+
+  /* Fix the safe area on iPhone (notch/home indicator) */
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    body { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
+  }
+
+  /* Remove tap highlight on mobile */
+  * { -webkit-tap-highlight-color: transparent; }
+  button, label, [onclick] { touch-action: manipulation; }
 </style>
 </head>
 <body>
@@ -1892,9 +2025,17 @@ function initPlayer() {
   player.addListener('not_ready', () => setAppStatus('הנגן התנתק', 'error'));
   player.addListener('player_state_changed', state => {
     if (!state) return;
-    isPlaying = !state.paused; positionMs = state.position; currentEpisodeDurationMs = state.duration;
+    isPlaying = !state.paused; positionMs = state.position;
+    if (state.duration) currentEpisodeDurationMs = state.duration;
     updatePlayPauseIcon(); updateProgress();
-    if (state.paused && state.position === 0 && state.restrictions && !isPlaying) handleEpisodeEnd();
+    // Re-arm end timer whenever state updates with fresh position
+    if (isPlaying && currentEpisodeDurationMs && state.uri === currentEpisodeUri) {
+      scheduleEpisodeEnd(currentEpisodeDurationMs, positionMs);
+    }
+    // Catch end via state change too (belt-and-suspenders)
+    if (state.paused && state.position === 0 && state.duration > 0 && !episodeEndHandled) {
+      handleEpisodeEnd();
+    }
   });
   player.addListener('initialization_error', ({ message }) => setAppStatus(message, 'error'));
   player.addListener('authentication_error', () => { localStorage.removeItem('sp_token'); location.reload(); });
@@ -1958,10 +2099,27 @@ async function selectEpisode(ep) {
 
 async function playEpisode(startMs = 0) {
   try {
+    episodeEndHandled = false;
+    clearEndTimer();
     const res = await spotifyFetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`,
       { method:'PUT', body:JSON.stringify({ uris:[currentEpisodeUri], position_ms: startMs }) });
     if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e.error?.message||res.status); }
-    startProgressInterval(); setAppStatus('', '');
+    startProgressInterval();
+    setAppStatus('', '');
+    // Wait briefly for Spotify to confirm playback, then arm the end timer
+    setTimeout(async () => {
+      if (!currentEpisodeDurationMs) {
+        // Fetch duration from API if SDK hasn't reported it yet
+        try {
+          const r = await spotifyFetch('https://api.spotify.com/v1/me/player?market=from_token');
+          if (r.ok && r.status !== 204) {
+            const d = await r.json();
+            if (d.item?.duration_ms) currentEpisodeDurationMs = d.item.duration_ms;
+          }
+        } catch(e) {}
+      }
+      scheduleEpisodeEnd(currentEpisodeDurationMs, startMs);
+    }, 2000);
   } catch(e) { setAppStatus('שגיאת ניגון: ' + e.message, 'error'); }
 }
 
@@ -1996,27 +2154,126 @@ function updateLoopStatus() {
   else el.textContent = `${repeatCount} מתוך ${repeatTarget} השמעות הושלמו`;
 }
 
+// ── RELIABLE REPEAT ENGINE ──
+// Strategy: schedule a setTimeout for exactly when the episode should end,
+// based on (duration - currentPosition). Falls back to player_state_changed.
+// On tab visibility restore, re-sync against the Spotify API (not SDK) to
+// recover from background throttling.
+
+let endTimer = null;
+let episodeEndHandled = false;
+
+function scheduleEpisodeEnd(durationMs, posMs) {
+  clearEndTimer();
+  if (!durationMs || durationMs <= 0) return;
+  const remaining = Math.max(0, durationMs - posMs);
+  // Add a small buffer to avoid firing slightly early
+  endTimer = setTimeout(() => verifyAndHandleEnd(), remaining + 800);
+}
+
+function clearEndTimer() {
+  if (endTimer) { clearTimeout(endTimer); endTimer = null; }
+}
+
+async function verifyAndHandleEnd() {
+  // Double-check via the REST API — immune to background throttling
+  try {
+    const res = await spotifyFetch('https://api.spotify.com/v1/me/player?market=from_token');
+    if (res.status === 204 || !res.ok) {
+      // No active player or truly finished
+      await handleEpisodeEnd();
+      return;
+    }
+    const data = await res.json();
+    const item = data.item;
+    const progress = data.progress_ms || 0;
+    const duration = item?.duration_ms || 0;
+    const playing = data.is_playing;
+    const isOurEpisode = item?.uri === currentEpisodeUri;
+
+    if (!playing && isOurEpisode && duration > 0 && progress >= duration - 2000) {
+      // Genuinely ended
+      await handleEpisodeEnd();
+    } else if (playing && isOurEpisode) {
+      // Still playing (maybe we fired early) — reschedule
+      scheduleEpisodeEnd(duration, progress);
+      // Sync UI
+      positionMs = progress;
+      currentEpisodeDurationMs = duration;
+      updateProgress();
+    } else if (!isOurEpisode) {
+      // Spotify moved to something else — treat as end
+      await handleEpisodeEnd();
+    } else {
+      // Paused but not at end — user paused it
+      updateProgress();
+    }
+  } catch(e) {
+    // Network error — try again in 3s
+    endTimer = setTimeout(() => verifyAndHandleEnd(), 3000);
+  }
+}
+
 async function handleEpisodeEnd() {
+  clearEndTimer();
+  episodeEndHandled = true;
   repeatCount++;
   repeatTarget = parseInt(document.getElementById('repeat-count').value)||3;
   updateLoopStatus();
-  if (loopUnlimited || repeatCount < repeatTarget) await playEpisode();
-  else {
+  if (loopUnlimited || repeatCount < repeatTarget) {
+    episodeEndHandled = false;
+    await playEpisode();
+  } else {
     setAppStatus(`חלומות מתוקים... הושמע ${repeatCount} פעמים הלילה`, 'success');
     isPlaying = false; updatePlayPauseIcon(); stopProgressInterval();
   }
 }
 
-function startProgressInterval() { stopProgressInterval(); progressInterval = setInterval(pollProgress, 1000); }
-function stopProgressInterval() { if (progressInterval) { clearInterval(progressInterval); progressInterval = null; } }
+// Light 5-second poll just for UI updates — not for end detection
+function startProgressInterval() {
+  stopProgressInterval();
+  progressInterval = setInterval(pollProgress, 5000);
+}
+function stopProgressInterval() {
+  if (progressInterval) { clearInterval(progressInterval); progressInterval = null; }
+  clearEndTimer();
+}
 
 async function pollProgress() {
   if (!player) return;
   const state = await player.getCurrentState(); if (!state) return;
   isPlaying = !state.paused; positionMs = state.position; currentEpisodeDurationMs = state.duration;
   updatePlayPauseIcon(); updateProgress();
-  if (!state.paused && state.position===0 && state.track_window.previous_tracks.length>0) handleEpisodeEnd();
 }
+
+// Re-sync when tab becomes visible again after being in background
+document.addEventListener('visibilitychange', async () => {
+  if (document.hidden || !currentEpisodeUri || !accessToken) return;
+  try {
+    const res = await spotifyFetch('https://api.spotify.com/v1/me/player?market=from_token');
+    if (!res.ok || res.status === 204) return;
+    const data = await res.json();
+    const item = data.item;
+    const progress = data.progress_ms || 0;
+    const duration = item?.duration_ms || 0;
+    const playing = data.is_playing;
+    const isOurEpisode = item?.uri === currentEpisodeUri;
+
+    positionMs = progress;
+    if (duration) currentEpisodeDurationMs = duration;
+    isPlaying = playing;
+    updatePlayPauseIcon();
+    updateProgress();
+
+    if (isOurEpisode && playing) {
+      // Still going — re-arm the end timer from current position
+      scheduleEpisodeEnd(duration, progress);
+    } else if (isOurEpisode && !playing && progress >= duration - 2000 && duration > 0) {
+      // Ended while we were in background
+      if (!episodeEndHandled) await handleEpisodeEnd();
+    }
+  } catch(e) {}
+});
 
 function updateProgress() {
   if (!currentEpisodeDurationMs) return;
