@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
 <title>עוד פעם</title>
 <style>
   :root {
@@ -1016,12 +1016,7 @@
   }
   .browse-tab.active { color: var(--pink-soft); border-bottom-color: var(--pink); }
   .browse-tab:hover:not(.active) { color: var(--text); }
-  .browse-list { max-height: 260px; overflow-y: auto; }
-  .browse-list,
-  #results-list {
-    overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
-  }
+  .browse-list { max-height: 260px; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
   .browse-list::-webkit-scrollbar { width: 4px; }
   .browse-list::-webkit-scrollbar-track { background: transparent; }
   .browse-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
@@ -1295,9 +1290,23 @@
     .fav-slot { padding: 8px; }
   }
 
-  /* Fix the safe area on iPhone (notch/home indicator) */
+  /* ── FIX 5: DYNAMIC VIEWPORT + SAFE AREA ── */
+  /* Use dvh (dynamic viewport height) where supported — accounts for
+     iOS Safari toolbar showing/hiding and keyboard appearance */
+  @supports (min-height: 100dvh) {
+    body { min-height: 100dvh; }
+    #section-app { min-height: 100dvh; }
+  }
+
+  /* Enhanced safe-area handling */
   @supports (padding-bottom: env(safe-area-inset-bottom)) {
-    body { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
+    body {
+      padding-bottom: max(80px, calc(60px + env(safe-area-inset-bottom)));
+    }
+    /* When player is sticky, its own bottom padding handles safe area */
+    @media (max-width: 480px) {
+      body { padding-bottom: 0 !important; }
+    }
   }
 
   /* Remove tap highlight on mobile */
@@ -1335,25 +1344,10 @@
     /* Full-width container with less side padding */
     .container { max-width: 100%; }
 
-    /* Keep player card reachable while scrolling */
-    #player-card {
-      position: sticky;
-      bottom: calc(8px + env(safe-area-inset-bottom));
-      z-index: 5;
-    }
-
     /* Search + link inputs: larger font to prevent iOS zoom */
     .search-input,
     .link-input,
     .field input { font-size: 16px; }
-
-    /* Improve readability of micro-labels on small screens */
-    .card-label,
-    .favorites-label,
-    .now-playing-label,
-    .loop-config h4,
-    #results h3,
-    .browse-header { font-size: 0.78rem; }
 
     /* Favorites: show title instead of just number */
     .fav-num { font-size: 0.55rem; }
@@ -1385,19 +1379,6 @@
     .volume-row { gap: 12px; }
   }
 
-  @media (max-width: 380px) {
-    .favorites-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .search-row { flex-wrap: wrap; }
-    .search-input { flex: 1 1 100%; }
-    .btn-search {
-      flex: 1 1 calc(50% - 4px);
-      width: 100%;
-      min-height: 46px;
-      justify-content: center;
-    }
-    #user-bar { flex-wrap: wrap; gap: 8px; }
-  }
-
   /* Progress track easier to tap */
   @media (pointer: coarse) {
     .progress-track {
@@ -1424,6 +1405,292 @@
     }
     .progress-fill::after { width: 16px; height: 16px; top: -6px; right: -8px; }
   }
+
+  /* ── FLOATING PLAYER ON MOBILE ── */
+  @media (max-width: 480px) {
+    /* Player floats fixed at bottom — truly above everything */
+    #player-card {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      border-radius: 20px 20px 0 0;
+      border-bottom: none;
+      border-left: none;
+      border-right: none;
+      margin: 0;
+      /* Frosted glass effect */
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      background: linear-gradient(180deg,
+        rgba(22,38,60,0.92) 0%,
+        rgba(13,27,42,0.97) 100%);
+      box-shadow:
+        0 -2px 0 rgba(212,132,154,0.15),
+        0 -20px 60px rgba(0,0,0,0.5),
+        0 -4px 20px rgba(13,27,42,0.8);
+      /* Safe area for home indicator */
+      padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+      /* Collapsed height when no episode selected */
+      transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+
+    /* Collapsed state — just show a mini bar */
+    #player-card.no-episode {
+      max-height: 72px;
+      padding-top: 14px;
+      padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+      cursor: pointer;
+    }
+
+    /* Expanded state — full player */
+    #player-card:not(.no-episode) {
+      max-height: 90dvh;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* App status floats just above player */
+    #app-status {
+      position: fixed;
+      bottom: 0;
+      left: 0; right: 0;
+      z-index: 201;
+      pointer-events: none;
+      text-align: center;
+      font-size: 0.78rem;
+      padding: 6px 16px calc(6px + env(safe-area-inset-bottom, 0px));
+      background: transparent;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    }
+
+    /* Push main content up so it's not hidden behind floating player */
+    #section-app {
+      padding-bottom: calc(var(--player-height, 380px) + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* When no episode, less padding needed */
+    #section-app:has(#player-card.no-episode) {
+      padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    }
+
+    body { padding-bottom: 0 !important; }
+  }
+
+  /* Mini bar content in collapsed state */
+  #player-mini {
+    display: none;
+  }
+  @media (max-width: 480px) {
+    #player-card.no-episode #player-mini {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 20px;
+      pointer-events: none;
+    }
+    #player-card.no-episode > *:not(#player-mini) {
+      display: none !important;
+    }
+  }
+
+  /* ── FIX 2: RAISE TINY TEXT ON MOBILE ── */
+  @media (max-width: 480px) {
+    .card-label,
+    .favorites-label,
+    .browse-header,
+    .loop-config h4,
+    .now-playing-label,
+    #results h3,
+    #user-plan,
+    .fav-num,
+    .fav-empty-text,
+    .fav-show,
+    .result-duration,
+    .browse-item-meta span,
+    .loop-status        { font-size: 0.8rem !important; letter-spacing: 0.06em; }
+
+    /* Slightly larger for key interactive labels */
+    .count-row label,
+    .loop-toggle span   { font-size: 0.88rem !important; }
+
+    /* Show name under episode title */
+    #ep-show            { font-size: 0.78rem !important; }
+
+    /* Time stamps */
+    .time-row           { font-size: 0.78rem !important; }
+  }
+
+  /* ── FIX 3: WRAP OVERFLOW ROWS ── */
+  @media (max-width: 480px) {
+    /* User bar: let name + plan wrap instead of overflow */
+    #user-bar {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .user-info {
+      flex: 1;
+      min-width: 0;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    #user-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 160px;
+    }
+    #user-plan {
+      margin-right: 0;
+      margin-left: 0;
+    }
+
+    /* Search row: input takes full width, buttons share a row below if needed */
+    .search-row {
+      flex-wrap: nowrap; /* keep on one line but shrink gracefully */
+    }
+    .search-input {
+      min-width: 0; /* allow shrink */
+    }
+    /* Link row: stack vertically on very narrow screens */
+    .link-row {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .link-input {
+      min-width: 0;
+      flex: 1 1 200px;
+    }
+    .btn-link {
+      flex-shrink: 0;
+    }
+  }
+
+  /* ── FIX 4: 2-COLUMN FAVORITES ON NARROW SCREENS ── */
+  @media (max-width: 380px) {
+    .favorites-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    /* Make the single filled slot span full width when others are empty */
+    .fav-slot:first-child:last-child {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* ── FIX 6: SCROLL BEHAVIOR ── */
+  /* Results panel */
+  #results {
+    overflow: hidden; /* panel itself clips */
+  }
+  #results-list {
+    max-height: 340px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Browse list — enhanced for mobile */
+  @media (max-width: 480px) {
+    .browse-list {
+      max-height: 45vh;
+      max-height: 45dvh;
+    }
+    #results-list {
+      max-height: 38vh;
+      max-height: 38dvh;
+    }
+  }
+
+  /* Smooth scroll for the main page */
+  html {
+    scroll-behavior: smooth;
+  }
+  .container {
+    overscroll-behavior-y: none;
+  }
+
+  /* ══════════════════════════════════════════
+     MOBILE UX IMPROVEMENTS
+     ══════════════════════════════════════════ */
+
+  @media (max-width: 480px) {
+
+    /* ── Scroll-hide header ── */
+    header {
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      will-change: transform;
+    }
+    header.hidden-header {
+      transform: translateY(-100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ── Pull-to-dismiss results / browse ── */
+    #results.visible,
+    #browse-panel.visible {
+      animation: slideDown 0.2s ease;
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Active favorite — stronger visual indicator ── */
+    .fav-slot.active {
+      background: linear-gradient(145deg, rgba(212,132,154,0.18), rgba(13,27,42,0.99));
+      box-shadow: 0 0 0 2px var(--pink), 0 4px 16px rgba(212,132,154,0.2);
+    }
+    .fav-slot.active .fav-title {
+      color: var(--pink-pale);
+    }
+    /* Playing dot on active favorite */
+    .fav-slot.active::after {
+      content: '';
+      position: absolute;
+      bottom: 8px; left: 8px;
+      width: 6px; height: 6px;
+      background: var(--pink);
+      border-radius: 50%;
+      box-shadow: 0 0 6px var(--pink);
+      animation: breathe 2.5s ease-in-out infinite;
+    }
+
+    /* ── URL keyboard on link input ── */
+    /* (inputmode set via HTML below) */
+
+    /* ── Swipe affordance on favorites ── */
+    .fav-slot {
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── Touch action on progress ── */
+    .progress-track {
+      touch-action: none;
+    }
+  }
+
+  /* Preview: compress on mobile so sign-in stays visible */
+  @media (max-width: 480px) {
+    .preview-wrap {
+      margin-top: 10px;
+      max-height: 260px;
+      overflow: hidden;
+      /* Fade out bottom to hint there's more */
+      -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    }
+    .preview-ui {
+      transform: scale(0.92);
+      transform-origin: top center;
+    }
+  }
 </style>
 </head>
 <body>
@@ -1439,7 +1706,17 @@
   <!-- SETUP -->
   <div id="section-setup">
 
-    <!-- PREVIEW -->
+    <div class="card">
+      <div class="card-label">התחברו ל־Spotify</div>
+      <input type="hidden" id="client-id-input" value="" />
+      <button class="btn btn-primary" onclick="startAuth()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+        התחברו עם Spotify
+      </button>
+    </div>
+    <div id="status"></div>
+
+    <!-- PREVIEW — shown below the sign-in button -->
     <div class="preview-wrap">
       <div class="preview-ui">
 
@@ -1518,16 +1795,6 @@
         <span class="preview-hint">התחברו כדי להתחיל</span>
       </div>
     </div><!-- /preview-wrap -->
-
-    <div class="card">
-      <div class="card-label">התחברו ל־Spotify</div>
-      <input type="hidden" id="client-id-input" value="" />
-      <button class="btn btn-primary" onclick="startAuth()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-        התחברו עם Spotify
-      </button>
-    </div>
-    <div id="status"></div>
   </div>
 
   <!-- APP -->
@@ -1559,6 +1826,11 @@
     <div class="link-row">
       <input class="link-input" type="text" id="link-input"
         placeholder="https://open.spotify.com/episode/..."
+        inputmode="url"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
         onkeydown="if(event.key==='Enter')openSpotifyLink()" />
       <button class="btn-link" onclick="openSpotifyLink()">פתחו קישור</button>
     </div>
@@ -1583,6 +1855,12 @@
     </div>
 
     <div id="player-card" class="no-episode">
+
+      <!-- Mini bar shown only in collapsed/no-episode state on mobile -->
+      <div id="player-mini">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(212,132,154,0.6)" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <span style="font-size:0.82rem;color:var(--text-dim);font-style:italic">בחרו פרק להשמעה...</span>
+      </div>
 
       <div class="now-playing-label">
         <div class="breathe-dot"></div>
@@ -1676,7 +1954,53 @@
 
 </div>
 
-<script src="https://sdk.scdn.co/spotify-player.js"></script>
+<script src="https://sdk.scdn.co/spotify-player.js">
+// ── SCROLL-HIDE HEADER ON MOBILE ──
+(function() {
+  let lastScrollY = 0;
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const header = document.querySelector('header');
+        if (!header) { ticking = false; return; }
+        const isMobile = window.innerWidth <= 480;
+        if (isMobile) {
+          if (window.scrollY > lastScrollY && window.scrollY > 60) {
+            header.classList.add('hidden-header');
+          } else {
+            header.classList.remove('hidden-header');
+          }
+        } else {
+          header.classList.remove('hidden-header');
+        }
+        lastScrollY = window.scrollY;
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+})();
+
+// ── TAP OUTSIDE TO DISMISS RESULTS / BROWSE ──
+document.addEventListener('click', (e) => {
+  const results = document.getElementById('results');
+  const browse = document.getElementById('browse-panel');
+  if (results?.classList.contains('visible') &&
+      !results.contains(e.target) &&
+      !document.getElementById('search-input')?.contains(e.target) &&
+      !e.target.closest('.btn-search')) {
+    results.classList.remove('visible');
+  }
+  if (browse?.classList.contains('visible') &&
+      !browse.contains(e.target) &&
+      !e.target.closest('[onclick*="toggleBrowse"]')) {
+    browse.classList.remove('visible');
+    browseVisible = false;
+  }
+}, { passive: true });
+
+</script>
 <script>
 let accessToken = null, player = null, deviceId = null;
 let currentEpisodeUri = null, currentEpisodeDurationMs = 0;
@@ -2110,6 +2434,9 @@ async function exchangeCode(code) {
 }
 
 function logout() {
+  userStartedPlayback = false;
+  episodeEndHandled = false;
+  clearEndTimer();
   ['sp_token','sp_token_expiry','sp_refresh_token','sp_pkce_verifier'].forEach(k => localStorage.removeItem(k));
   accessToken = null;
   if (player) { player.disconnect(); player = null; }
@@ -2140,6 +2467,19 @@ async function fetchUser() {
 
 window.onSpotifyWebPlaybackSDKReady = () => { if (accessToken) initPlayer(); };
 
+// Tap the collapsed mini bar to scroll to search
+document.addEventListener('DOMContentLoaded', () => {
+  const mini = document.getElementById('player-mini');
+  if (mini) {
+    mini.parentElement.addEventListener('click', (e) => {
+      if (document.getElementById('player-card').classList.contains('no-episode')) {
+        document.getElementById('search-input')?.focus();
+        document.getElementById('search-input')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }
+});
+
 function initPlayer() {
   if (player) return;
   player = new Spotify.Player({ name: 'Story Looper', getOAuthToken: cb => cb(accessToken), volume: 0.7 });
@@ -2150,12 +2490,16 @@ function initPlayer() {
     isPlaying = !state.paused; positionMs = state.position;
     if (state.duration) currentEpisodeDurationMs = state.duration;
     updatePlayPauseIcon(); updateProgress();
-    // Re-arm end timer whenever state updates with fresh position
-    if (isPlaying && currentEpisodeDurationMs && state.uri === currentEpisodeUri) {
+    // Only arm repeat engine after user explicitly started an episode
+    if (!userStartedPlayback) return;
+    if (state.track_window?.current_track?.uri !== currentEpisodeUri) return;
+    // Re-arm end timer with fresh position
+    if (isPlaying && currentEpisodeDurationMs) {
       scheduleEpisodeEnd(currentEpisodeDurationMs, positionMs);
     }
-    // Catch end via state change too (belt-and-suspenders)
-    if (state.paused && state.position === 0 && state.duration > 0 && !episodeEndHandled) {
+    // Belt-and-suspenders: catch end via state change
+    // Only fire if well into the episode (>10s played) to avoid false positive at position=0 on load
+    if (state.paused && state.position === 0 && state.duration > 0 && positionMs > 10000 && !episodeEndHandled) {
       handleEpisodeEnd();
     }
   });
@@ -2223,6 +2567,7 @@ async function selectEpisode(ep) {
 async function playEpisode(startMs = 0) {
   try {
     episodeEndHandled = false;
+    userStartedPlayback = true;
     clearEndTimer();
     const res = await spotifyFetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`,
       { method:'PUT', body:JSON.stringify({ uris:[currentEpisodeUri], position_ms: startMs }) });
@@ -2285,6 +2630,7 @@ function updateLoopStatus() {
 
 let endTimer = null;
 let episodeEndHandled = false;
+let userStartedPlayback = false; // only arm repeat after user explicitly plays
 
 function scheduleEpisodeEnd(durationMs, posMs) {
   clearEndTimer();
@@ -2299,12 +2645,13 @@ function clearEndTimer() {
 }
 
 async function verifyAndHandleEnd() {
+  if (!userStartedPlayback || !currentEpisodeUri) return;
   // Double-check via the REST API — immune to background throttling
   try {
     const res = await spotifyFetch('https://api.spotify.com/v1/me/player?market=from_token');
     if (res.status === 204 || !res.ok) {
-      // No active player or truly finished
-      await handleEpisodeEnd();
+      // No active player — only treat as end if we were actually playing
+      if (userStartedPlayback) await handleEpisodeEnd();
       return;
     }
     const data = await res.json();
@@ -2423,6 +2770,52 @@ function setAppStatus(msg, type='') {
   const el=document.getElementById('app-status'); el.innerHTML=msg;
   el.className = type==='error'?'error-text':type==='success'?'success-text':'';
 }
+
+// ── SCROLL-HIDE HEADER ON MOBILE ──
+(function() {
+  let lastScrollY = 0;
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const header = document.querySelector('header');
+        if (!header) { ticking = false; return; }
+        const isMobile = window.innerWidth <= 480;
+        if (isMobile) {
+          if (window.scrollY > lastScrollY && window.scrollY > 60) {
+            header.classList.add('hidden-header');
+          } else {
+            header.classList.remove('hidden-header');
+          }
+        } else {
+          header.classList.remove('hidden-header');
+        }
+        lastScrollY = window.scrollY;
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+})();
+
+// ── TAP OUTSIDE TO DISMISS RESULTS / BROWSE ──
+document.addEventListener('click', (e) => {
+  const results = document.getElementById('results');
+  const browse = document.getElementById('browse-panel');
+  if (results?.classList.contains('visible') &&
+      !results.contains(e.target) &&
+      !document.getElementById('search-input')?.contains(e.target) &&
+      !e.target.closest('.btn-search')) {
+    results.classList.remove('visible');
+  }
+  if (browse?.classList.contains('visible') &&
+      !browse.contains(e.target) &&
+      !e.target.closest('[onclick*="toggleBrowse"]')) {
+    browse.classList.remove('visible');
+    browseVisible = false;
+  }
+}, { passive: true });
+
 </script>
 </body>
 </html>
