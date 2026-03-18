@@ -1017,6 +1017,11 @@
   .browse-tab.active { color: var(--pink-soft); border-bottom-color: var(--pink); }
   .browse-tab:hover:not(.active) { color: var(--text); }
   .browse-list { max-height: 260px; overflow-y: auto; }
+  .browse-list,
+  #results-list {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
   .browse-list::-webkit-scrollbar { width: 4px; }
   .browse-list::-webkit-scrollbar-track { background: transparent; }
   .browse-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
@@ -1330,10 +1335,25 @@
     /* Full-width container with less side padding */
     .container { max-width: 100%; }
 
+    /* Keep player card reachable while scrolling */
+    #player-card {
+      position: sticky;
+      bottom: calc(8px + env(safe-area-inset-bottom));
+      z-index: 5;
+    }
+
     /* Search + link inputs: larger font to prevent iOS zoom */
     .search-input,
     .link-input,
     .field input { font-size: 16px; }
+
+    /* Improve readability of micro-labels on small screens */
+    .card-label,
+    .favorites-label,
+    .now-playing-label,
+    .loop-config h4,
+    #results h3,
+    .browse-header { font-size: 0.78rem; }
 
     /* Favorites: show title instead of just number */
     .fav-num { font-size: 0.55rem; }
@@ -1363,6 +1383,19 @@
 
     /* Volume row — bigger slider thumb area */
     .volume-row { gap: 12px; }
+  }
+
+  @media (max-width: 380px) {
+    .favorites-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .search-row { flex-wrap: wrap; }
+    .search-input { flex: 1 1 100%; }
+    .btn-search {
+      flex: 1 1 calc(50% - 4px);
+      width: 100%;
+      min-height: 46px;
+      justify-content: center;
+    }
+    #user-bar { flex-wrap: wrap; gap: 8px; }
   }
 
   /* Progress track easier to tap */
