@@ -1691,6 +1691,295 @@
       transform-origin: top center;
     }
   }
+
+  /* ════════════════════════════════════════
+     VARIANT D — COMPACT PLAYER + FAVS
+     ════════════════════════════════════════ */
+
+  /* ── Compact favorites grid ── */
+  .favorites-grid-compact {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 0;
+  }
+
+  .fav-compact {
+    flex: 1;
+    position: relative;
+    height: 52px;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    transition: border-color 0.2s, transform 0.15s;
+    background: var(--navy2);
+  }
+
+  .fav-compact:hover { border-color: var(--pink); }
+  .fav-compact:active { transform: scale(0.96); }
+
+  .fav-compact.empty {
+    border-style: dashed;
+    border-color: rgba(212,132,154,0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: default;
+    flex-direction: column;
+  }
+  .fav-compact.empty:hover { border-color: rgba(212,132,154,0.35); }
+
+  .fav-compact.active {
+    border-color: var(--pink);
+    box-shadow: 0 0 0 1px var(--pink);
+  }
+
+  .fav-compact-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+  }
+
+  .fav-compact-num {
+    position: absolute;
+    top: 3px; right: 4px;
+    font-size: 0.58rem;
+    font-weight: 700;
+    color: rgba(245,237,232,0.8);
+    background: rgba(13,27,42,0.55);
+    border-radius: 3px;
+    padding: 0 3px;
+    line-height: 1.5;
+    z-index: 2;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  }
+
+  .fav-compact-dot {
+    position: absolute;
+    bottom: 5px; left: 50%;
+    transform: translateX(-50%);
+    width: 5px; height: 5px;
+    background: var(--pink);
+    border-radius: 50%;
+    box-shadow: 0 0 5px var(--pink);
+    animation: breathe 2.5s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  .fav-compact-remove {
+    position: absolute;
+    top: 2px; left: 3px;
+    width: 18px; height: 18px;
+    background: rgba(13,27,42,0.7);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    z-index: 3;
+    padding: 0;
+    line-height: 0;
+  }
+
+  .fav-compact:hover .fav-compact-remove { display: flex; }
+  .fav-compact-remove:hover { color: var(--pink-soft); background: rgba(13,27,42,0.9); }
+
+  /* ── Player D layout ── */
+  .pd-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Cover art — compact 36px on desktop, sized further on mobile */
+  #ep-cover-wrap {
+    width: 36px; height: 36px;
+    border-radius: 7px;
+    flex-shrink: 0;
+  }
+
+  #ep-cover-placeholder {
+    border-radius: 7px;
+  }
+
+  .pd-meta {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .pd-ep-name {
+    font-size: 0.88rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--cream);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+    margin-bottom: 2px;
+  }
+
+  .pd-ep-show {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 300;
+  }
+
+  .pd-hearts {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+
+  /* Progress */
+  .pd-progress {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 6px;
+  }
+
+  .pd-times {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.66rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+    direction: ltr;
+  }
+
+  /* Inline loop bar */
+  .pd-loop-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: rgba(13,27,42,0.5);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    flex-wrap: nowrap;
+    position: relative;
+    z-index: 1;
+    margin-top: 2px;
+  }
+
+  .pd-loop-sep {
+    width: 1px;
+    height: 14px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  .pd-count-inline {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .pd-count-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-dim);
+    font-size: 1rem;
+    line-height: 1;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 5px;
+    transition: color 0.15s, background 0.15s;
+    touch-action: manipulation;
+    padding: 0;
+  }
+
+  .pd-count-btn:hover { color: var(--pink-soft); background: rgba(212,132,154,0.1); }
+
+  /* Override count-input to be tiny inline */
+  .pd-count-inline .count-input {
+    width: 36px;
+    font-size: 0.82rem;
+    padding: 3px 4px;
+    border-radius: 5px;
+  }
+
+  .pd-times-label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+
+  /* Loop status — compact */
+  #loop-status {
+    font-size: 0.72rem;
+    color: var(--pink-soft);
+    font-style: italic;
+    flex: 1;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: auto;
+    margin-top: 0;
+  }
+
+  /* ── MOBILE: floating D player ── */
+  @media (max-width: 480px) {
+    #player-card {
+      padding: 8px 14px calc(14px + env(safe-area-inset-bottom, 0px));
+    }
+
+    #player-card.no-episode {
+      padding-top: 12px;
+      padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* Cover stays small on mobile */
+    #ep-cover-wrap { width: 34px; height: 34px; }
+
+    /* Title slightly smaller */
+    .pd-ep-name { font-size: 0.84rem; }
+
+    /* Controls tighter */
+    .controls { gap: 8px; margin-bottom: 6px; }
+    .ctrl-btn.main { width: 46px; height: 46px; }
+
+    /* Volume row compact */
+    .volume-row { padding: 8px 0 0; margin-bottom: 6px; }
+
+    /* Loop bar tighter */
+    .pd-loop-bar { padding: 5px 8px; gap: 6px; }
+    .pd-count-inline .count-input { width: 30px; font-size: 0.8rem; }
+
+    /* Favorites compact grid on mobile */
+    .favorites-grid-compact { gap: 8px; }
+    .fav-compact { height: 46px; border-radius: 8px; }
+    .fav-compact-remove { display: none !important; }
+
+    /* Section padding tightened */
+    #section-app {
+      padding-bottom: calc(200px + env(safe-area-inset-bottom, 0px));
+    }
+  }
+
+  /* Override old player empty state for Variant D */
+  #player-card.no-episode .pd-top { opacity: 0.45; pointer-events: none; }
+  #player-card.no-episode .pd-progress { opacity: 0.3; pointer-events: none; }
+  #player-card.no-episode .controls { opacity: 0.3; pointer-events: none; }
+  #player-card.no-episode .volume-row { opacity: 0.3; pointer-events: none; }
+  #player-card.no-episode .pd-loop-bar { opacity: 0.3; pointer-events: none; }
+  #player-card.no-episode .breathe-dot { opacity: 0; }
+  #player-card.no-episode .now-playing-label { color: var(--text-dim); }
 </style>
 </head>
 <body>
@@ -1818,9 +2107,7 @@
       <button class="btn-search" onclick="searchEpisodes()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
-      <button class="btn-search" style="background:linear-gradient(135deg,rgba(26,48,80,0.9),rgba(13,27,42,0.99));border:1px solid var(--border)" title="עיון ברשימות" onclick="toggleBrowse()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1" fill="currentColor" stroke="none"/><circle cx="3" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="3" cy="18" r="1" fill="currentColor" stroke="none"/></svg>
-      </button>
+
     </div>
 
     <div class="link-row">
@@ -1835,16 +2122,11 @@
       <button class="btn-link" onclick="openSpotifyLink()">פתחו קישור</button>
     </div>
 
-    <div id="browse-panel">
-      <div class="browse-header" id="browse-header">
-        <span id="browse-title">פלייליסט עוד פעם</span>
-      </div>
-      <div class="browse-list" id="browse-list"></div>
-    </div>
+<!-- browse panel removed in Variant D -->
 
     <div class="favorites-section" id="favorites-section">
       <div class="favorites-label">&#x2665; מועדפים</div>
-      <div class="favorites-grid" id="favorites-grid">
+      <div class="favorites-grid-compact" id="favorites-grid">
         <!-- rendered by JS -->
       </div>
     </div>
@@ -1856,94 +2138,83 @@
 
     <div id="player-card" class="no-episode">
 
-      <!-- Mini bar shown only in collapsed/no-episode state on mobile -->
+      <!-- Mini bar: shown only when no episode selected on mobile -->
       <div id="player-mini">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(212,132,154,0.6)" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(212,132,154,0.5)" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
         <span style="font-size:0.82rem;color:var(--text-dim);font-style:italic">בחרו פרק להשמעה...</span>
       </div>
 
-      <div class="now-playing-label">
-        <div class="breathe-dot"></div>
-        מתנגן עכשיו
-        <div id="fav-save-btns" style="margin-right:0;margin-left:auto;display:flex;align-items:center;gap:4px"></div>
-      </div>
-
-      <div class="episode-row">
+      <!-- ── ROW 1: art + title/show + heart saves ── -->
+      <div class="pd-top">
         <div id="ep-cover-wrap">
           <img id="ep-cover" src="" alt="cover" onerror="this.style.display='none';document.getElementById('ep-cover-placeholder').style.display='flex'" onload="this.style.display='block';document.getElementById('ep-cover-placeholder').style.display='none'" />
           <div id="ep-cover-placeholder">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
               <path d="M65 20 A30 30 0 1 0 65 80 A22 22 0 1 1 65 20 Z" fill="rgba(168,152,144,0.25)"/>
               <circle cx="72" cy="28" r="3" fill="rgba(201,169,110,0.3)"/>
-              <circle cx="78" cy="38" r="1.5" fill="rgba(201,169,110,0.2)"/>
             </svg>
           </div>
         </div>
-        <div class="episode-text">
-          <div id="ep-name">בחרו פרק להשמעה</div>
-          <div id="ep-show">חפשו, הדביקו קישור, או בחרו מהמועדפים</div>
+        <div class="pd-meta">
+          <div id="ep-name" class="pd-ep-name">בחרו פרק להשמעה</div>
+          <div id="ep-show" class="pd-ep-show">חפשו, הדביקו קישור, או בחרו מהמועדפים</div>
         </div>
+        <div id="fav-save-btns" class="pd-hearts"></div>
       </div>
 
-      <div class="progress-area">
+      <!-- ── ROW 2: progress ── -->
+      <div class="pd-progress">
         <div class="progress-track" id="progress-track" onclick="seekTo(event)">
           <div class="progress-fill" id="progress-fill"></div>
         </div>
-        <div class="time-row">
+        <div class="pd-times">
           <span id="time-cur">0:00</span>
           <span id="time-dur">0:00</span>
         </div>
       </div>
 
+      <!-- ── ROW 3: transport controls ── -->
       <div class="controls">
         <button class="ctrl-btn" title="להתחיל מחדש" onclick="restartEpisode()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
         </button>
         <button class="ctrl-btn" onclick="skip(-15)" title="15 שניות אחורה">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 12 4 7v10zm.5 0 7.5-5v10z"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 12 4 7v10zm.5 0 7.5-5v10z"/></svg>
         </button>
         <button class="ctrl-btn main" onclick="togglePlayPause()">
           <svg id="icon-play"  width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
           <svg id="icon-pause" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class="hidden"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
         </button>
         <button class="ctrl-btn" onclick="skip(30)" title="30 שניות קדימה">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M4 18l7.5-5L4 8v10zm8-10v10l7.5-5z"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4 18l7.5-5L4 8v10zm8-10v10l7.5-5z"/></svg>
         </button>
         <button class="ctrl-btn" title="לדלג לסוף" onclick="skipToEnd()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18V6l8.5 6L6 18zm8.5 0h2V6h-2v12z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18V6l8.5 6L6 18zm8.5 0h2V6h-2v12z"/></svg>
         </button>
       </div>
 
+      <!-- ── ROW 4: volume ── -->
       <div class="volume-row">
-        <svg class="volume-icon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+        <svg class="volume-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
         <input type="range" id="volume-slider" min="0" max="100" value="70" oninput="setVolume(this.value)" />
-        <svg class="volume-icon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+        <svg class="volume-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
       </div>
 
-      <div class="loop-config" dir="rtl">
-        <h4>השמעה חוזרת</h4>
-        <div class="loop-row">
-          <label class="loop-toggle" onclick="toggleUnlimited()">
-            <div class="toggle-track" id="unlimited-toggle">
-              <div class="toggle-knob"></div>
-            </div>
-            <span>ללא הגבלה</span>
-          </label>
-          <div class="divider-v"></div>
-          <div class="count-row">
-            <label>חזור</label>
-            <input type="number" class="count-input" id="repeat-count" value="3" min="1" max="999" />
-            <label>פעמים</label>
-          </div>
+      <!-- ── ROW 5: inline loop bar ── -->
+      <div class="pd-loop-bar" dir="rtl">
+        <label class="loop-toggle" onclick="toggleUnlimited()">
+          <div class="toggle-track" id="unlimited-toggle"><div class="toggle-knob"></div></div>
+          <span>ללא הגבלה</span>
+        </label>
+        <div class="pd-loop-sep"></div>
+        <div class="pd-count-inline">
+          <button class="pd-count-btn" onclick="adjustRepeat(-1)" type="button">−</button>
+          <input type="number" class="count-input" id="repeat-count" value="3" min="1" max="999" />
+          <span class="pd-times-label">×</span>
+          <button class="pd-count-btn" onclick="adjustRepeat(1)" type="button">+</button>
         </div>
+        <div class="pd-loop-sep"></div>
         <div class="loop-status" id="loop-status"></div>
-      </div>
-
-      <div class="playlist-row">
-        <button class="btn-playlist" id="btn-add-playlist" onclick="addToCollabPlaylist()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-          הוסיפו לפלייליסט המשותף
-        </button>
       </div>
 
     </div>
@@ -2101,27 +2372,22 @@ function renderFavorites() {
   const favs = loadFavorites();
   const grid = document.getElementById('favorites-grid');
   grid.innerHTML = favs.map((fav, i) => {
+    const isActive = fav && fav.uri === currentEpisodeUri;
     if (!fav) return `
-      <div class="fav-slot empty">
-        <span class="fav-num">${i + 1}</span>
-        <span class="fav-empty-icon">&#x2665;</span>
-        <span class="fav-empty-text">מקום פנוי</span>
+      <div class="fav-compact empty" title="מקום פנוי ${i+1}">
+        <span class="fav-compact-num">${i + 1}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(212,132,154,0.3)" stroke-width="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
       </div>`;
-
-    const isActive = fav.uri === currentEpisodeUri;
     return `
-      <div class="fav-slot${isActive ? ' active' : ''}" onclick="playFavorite(${i})">
-        <span class="fav-num">${i + 1}</span>
+      <div class="fav-compact${isActive ? ' active' : ''}" onclick="playFavorite(${i})" title="${esc(fav.name || '')}">
+        <span class="fav-compact-num">${i + 1}</span>
         ${fav.image
-          ? `<img class="fav-cover" src="${esc(fav.image)}" alt="" />`
-          : `<div class="fav-cover" style="background:var(--navy3);border-radius:8px;display:flex;align-items:center;justify-content:center"><span style="font-size:1.4rem;opacity:0.3">&#x1F319;</span></div>`}
-        <div class="fav-title">${esc(fav.name || '...טוען')}</div>
-        <div class="fav-show">${esc(fav.show || '')}</div>
-        <div class="fav-actions">
-          <button class="fav-btn" title="להסיר" onclick="clearFavorite(${i}, event)">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </button>
-        </div>
+          ? `<img class="fav-compact-img" src="${esc(fav.image)}" alt="" />`
+          : `<div class="fav-compact-img" style="background:var(--navy3);display:flex;align-items:center;justify-content:center"><span style="font-size:0.9rem;opacity:0.3">&#x1F319;</span></div>`}
+        ${isActive ? '<div class="fav-compact-dot"></div>' : ''}
+        <button class="fav-compact-remove" title="להסיר" onclick="clearFavorite(${i}, event)">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
       </div>`;
   }).join('');
 }
@@ -2551,9 +2817,7 @@ async function selectEpisodeObj(ep) {
   if(ep.image){_ec.src=ep.image;_ec.style.display='block';_ep.style.display='none';}else{_ec.src='';_ec.style.display='none';_ep.style.display='flex';}
   document.getElementById('player-card').classList.remove('no-episode');
   document.getElementById('results').classList.remove('visible');
-  // Reset playlist button
-  const pb = document.getElementById('btn-add-playlist');
-  if (pb) { pb.classList.remove('done'); pb.disabled = false; pb.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg> הוסיפו לפלייליסט המשותף`; }
+  // playlist button removed in Variant D
   renderFavorites();
   updateSaveHearts();
   setAppStatus('', '');
@@ -2614,12 +2878,19 @@ function toggleUnlimited() {
   updateLoopStatus();
 }
 
+function adjustRepeat(delta) {
+  const inp = document.getElementById('repeat-count');
+  const val = Math.max(1, Math.min(999, (parseInt(inp.value) || 3) + delta));
+  inp.value = val;
+  updateLoopStatus();
+}
+
 function updateLoopStatus() {
   const el = document.getElementById('loop-status');
   repeatTarget = parseInt(document.getElementById('repeat-count').value)||3;
   if (!currentEpisodeUri) { el.textContent=''; return; }
-  if (loopUnlimited) el.textContent = `הסיפור לא נגמר... ${repeatCount} פעמים עד כה`;
-  else el.textContent = `${repeatCount} מתוך ${repeatTarget} השמעות הושלמו`;
+  if (loopUnlimited) el.textContent = `${repeatCount} ×`;
+  else el.textContent = `${repeatCount}/${repeatTarget}`;
 }
 
 // ── RELIABLE REPEAT ENGINE ──
