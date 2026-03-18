@@ -469,14 +469,7 @@
     z-index: 1;
   }
 
-  #ep-cover {
-    width: 76px; height: 76px;
-    border-radius: 14px;
-    object-fit: cover;
-    flex-shrink: 0;
-    background: var(--navy2);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-  }
+
 
   .episode-text { flex: 1; min-width: 0; }
 
@@ -1234,7 +1227,8 @@
 
     /* Episode row — smaller cover on small screens */
     .episode-row { gap: 12px; margin-bottom: 16px; }
-    #ep-cover { width: 62px; height: 62px; border-radius: 12px; }
+    #ep-cover-wrap { width: 62px; height: 62px; border-radius: 12px; }
+    #ep-cover { border-radius: 12px; }
     #ep-name  { font-size: 0.92rem; }
     #ep-show  { font-size: 0.7rem; }
 
@@ -1304,6 +1298,99 @@
   /* Remove tap highlight on mobile */
   * { -webkit-tap-highlight-color: transparent; }
   button, label, [onclick] { touch-action: manipulation; }
+
+  #ep-cover-wrap {
+    width: 76px; height: 76px;
+    border-radius: 14px;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, rgba(26,48,80,0.8), rgba(13,27,42,0.9));
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  #ep-cover {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: none;
+    border-radius: 14px;
+  }
+  #ep-cover-placeholder {
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(168,152,144,0.1);
+    border-radius: 14px;
+  }
+
+  /* ── MOBILE DESIGN IMPROVEMENTS ── */
+
+  /* Sticky player on mobile — keep it at bottom */
+  @media (max-width: 480px) {
+    /* Full-width container with less side padding */
+    .container { max-width: 100%; }
+
+    /* Search + link inputs: larger font to prevent iOS zoom */
+    .search-input,
+    .link-input,
+    .field input { font-size: 16px; }
+
+    /* Favorites: show title instead of just number */
+    .fav-num { font-size: 0.55rem; }
+
+    /* Loop row: stack vertically on small screens */
+    .loop-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .divider-v { display: none; }
+    .count-row { width: 100%; justify-content: flex-start; gap: 10px; }
+
+    /* Bigger repeat count input */
+    .count-input { width: 60px; font-size: 1.1rem; padding: 7px 8px; }
+
+    /* Loop status clearer */
+    .loop-status { font-size: 0.8rem; }
+
+    /* Browse list taller on mobile — uses more screen */
+    .browse-list { max-height: 50vh; }
+
+    /* Results list */
+    #results { margin-bottom: 14px; }
+
+    /* App status */
+    #app-status { padding: 10px 4px; min-height: 38px; font-size: 0.82rem; }
+
+    /* Btn playlist full readable */
+    .btn-playlist { font-size: 0.86rem; padding: 13px 14px; }
+
+    /* Volume row — bigger slider thumb area */
+    .volume-row { gap: 12px; }
+  }
+
+  /* Progress track easier to tap */
+  @media (pointer: coarse) {
+    .progress-track {
+      height: 6px;
+      margin-bottom: 10px;
+      padding: 8px 0;
+      height: auto;
+      background: transparent;
+      position: relative;
+    }
+    .progress-track::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      top: 50%; transform: translateY(-50%);
+      height: 4px;
+      background: rgba(245,237,232,0.08);
+      border-radius: 2px;
+    }
+    .progress-fill {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      height: 4px;
+    }
+    .progress-fill::after { width: 16px; height: 16px; top: -6px; right: -8px; }
+  }
 </style>
 </head>
 <body>
@@ -1445,11 +1532,7 @@
 
     <div id="browse-panel">
       <div class="browse-header" id="browse-header">
-        <span id="browse-title">הספרייה שלי</span>
-      </div>
-      <div class="browse-tabs" id="browse-tabs">
-        <button class="browse-tab active" onclick="switchBrowseTab('playlists')">רשימות השמעה</button>
-        <button class="browse-tab" onclick="switchBrowseTab('liked')">אהבתי</button>
+        <span id="browse-title">פלייליסט עוד פעם</span>
       </div>
       <div class="browse-list" id="browse-list"></div>
     </div>
@@ -1475,7 +1558,16 @@
       </div>
 
       <div class="episode-row">
-        <img id="ep-cover" src="" alt="cover" />
+        <div id="ep-cover-wrap">
+          <img id="ep-cover" src="" alt="cover" onerror="this.style.display='none';document.getElementById('ep-cover-placeholder').style.display='flex'" onload="this.style.display='block';document.getElementById('ep-cover-placeholder').style.display='none'" />
+          <div id="ep-cover-placeholder">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
+              <path d="M65 20 A30 30 0 1 0 65 80 A22 22 0 1 1 65 20 Z" fill="rgba(168,152,144,0.25)"/>
+              <circle cx="72" cy="28" r="3" fill="rgba(201,169,110,0.3)"/>
+              <circle cx="78" cy="38" r="1.5" fill="rgba(201,169,110,0.2)"/>
+            </svg>
+          </div>
+        </div>
         <div class="episode-text">
           <div id="ep-name">בחרו פרק להשמעה</div>
           <div id="ep-show">חפשו, הדביקו קישור, או בחרו מהמועדפים</div>
@@ -1517,7 +1609,7 @@
         <svg class="volume-icon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
       </div>
 
-      <div class="loop-config">
+      <div class="loop-config" dir="rtl">
         <h4>השמעה חוזרת</h4>
         <div class="loop-row">
           <label class="loop-toggle" onclick="toggleUnlimited()">
@@ -1562,19 +1654,23 @@ let loopUnlimited = false, repeatTarget = 3, repeatCount = 0;
 const DEFAULT_FAVORITES = [
   {
     uri: 'spotify:episode:6Q1aexD5cFMpWOYIxwgnZc',
-    name: null, // will be fetched from API after login
+    name: null,
     show: null,
     image: null,
-    startMs: 15000
+    startMs: 0
   },
   null,
   null
 ];
+const MAX_FAVORITES = 3;
 
 function loadFavorites() {
   try {
     const stored = localStorage.getItem('sl_favorites');
-    if (stored) return JSON.parse(stored);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      return parsed.slice(0, MAX_FAVORITES); // enforce max 3
+    }
   } catch(e) {}
   return [...DEFAULT_FAVORITES];
 }
@@ -1617,7 +1713,8 @@ async function playFavorite(slot) {
   updateLoopStatus();
   document.getElementById('ep-name').textContent = fav.name  || '...טוען';
   document.getElementById('ep-show').textContent = fav.show  || '';
-  document.getElementById('ep-cover').src        = fav.image || '';
+  const _c=document.getElementById('ep-cover'),_p=document.getElementById('ep-cover-placeholder');
+  if(fav.image){_c.src=fav.image;_c.style.display='block';_p.style.display='none';}else{_c.src='';_c.style.display='none';_p.style.display='flex';}
   document.getElementById('player-card').classList.remove('no-episode');
   document.getElementById('results').classList.remove('visible');
   await playEpisode(fav.startMs || 0);
@@ -1760,37 +1857,29 @@ function toggleBrowse() {
   const panel = document.getElementById('browse-panel');
   if (browseVisible) {
     panel.classList.add('visible');
-    loadBrowseTab(browseTab);
+    loadSharedPlaylist();
   } else {
     panel.classList.remove('visible');
-    currentPlaylistId = null;
   }
 }
 
-function switchBrowseTab(tab) {
-  browseTab = tab;
-  currentPlaylistId = null;
-  document.querySelectorAll('.browse-tab').forEach((el, i) => {
-    el.classList.toggle('active', (i === 0 && tab === 'playlists') || (i === 1 && tab === 'liked'));
-  });
-  document.getElementById('browse-title').textContent = tab === 'playlists' ? 'הספרייה שלי' : 'אהבתי';
-  loadBrowseTab(tab);
-}
-
-async function loadBrowseTab(tab) {
+async function loadSharedPlaylist() {
   const list = document.getElementById('browse-list');
   list.innerHTML = '<div style="padding:16px;text-align:center"><span class="spinner"></span></div>';
   try {
-    if (tab === 'playlists') {
-      const res = await spotifyFetch('https://api.spotify.com/v1/me/playlists?limit=20');
-      const data = await res.json();
-      renderBrowseItems(data.items || [], 'playlist');
-    } else {
-      const res = await spotifyFetch('https://api.spotify.com/v1/me/episodes?limit=20&market=from_token');
-      const data = await res.json();
-      renderBrowseItems((data.items || []).map(i => i.episode), 'episode');
+    const res = await spotifyFetch(`https://api.spotify.com/v1/playlists/${COLLAB_PLAYLIST_ID}/tracks?limit=50&market=from_token`);
+    const data = await res.json();
+    const episodes = (data.items || [])
+      .filter(i => i.track && (i.track.type === 'episode' || i.track.episode))
+      .map(i => i.track);
+    if (!episodes.length) {
+      list.innerHTML = '<div style="padding:16px;font-size:0.8rem;color:var(--text-dim);text-align:center">הפלייליסט ריק כרגע.</div>';
+      return;
     }
-  } catch(e) { list.innerHTML = `<div style="padding:16px;font-size:0.8rem;color:var(--text-dim);text-align:center">${e.message}</div>`; }
+    renderBrowseItems(episodes, 'episode');
+  } catch(e) {
+    list.innerHTML = `<div style="padding:16px;font-size:0.8rem;color:var(--text-dim);text-align:center">${e.message}</div>`;
+  }
 }
 
 async function loadPlaylistEpisodes(playlistId, playlistName) {
@@ -2081,7 +2170,8 @@ async function selectEpisodeObj(ep) {
   currentEpisodeUri = ep.uri; currentEpisodeDurationMs = ep.durationMs || 0; repeatCount = 0; updateLoopStatus();
   document.getElementById('ep-name').textContent = ep.name;
   document.getElementById('ep-show').textContent = ep.show;
-  document.getElementById('ep-cover').src = ep.image || '';
+  const _ec=document.getElementById('ep-cover'),_ep=document.getElementById('ep-cover-placeholder');
+  if(ep.image){_ec.src=ep.image;_ec.style.display='block';_ep.style.display='none';}else{_ec.src='';_ec.style.display='none';_ep.style.display='flex';}
   document.getElementById('player-card').classList.remove('no-episode');
   document.getElementById('results').classList.remove('visible');
   // Reset playlist button
